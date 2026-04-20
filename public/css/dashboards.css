@@ -120,7 +120,7 @@ body {
   position: relative;
   top: 0;
   left: 20%;
-  background-color: #161618;
+  background-color: #7E71CB;
   height: 100vh;
   overflow: auto;
 }
@@ -348,15 +348,15 @@ canvas {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  border-right: 3px solid #32b9cd;
-  background-color: #212124;
+  border-right: 3px solid #483b92;
+  background-color: #6553C9;
 }
 
 .dash-right {
   display: flex;
   width: 70%;
   height: fit-content;
-  background-color: #161618;
+  background-color: #6553C9;
   position: relative;
   top: 0;
   left: 25%;
@@ -365,7 +365,9 @@ canvas {
 }
 
 .header-left h1 {
-  color: #32b9cd;
+  color: white;
+  font-family: 'Friends', sans-serif;
+  margin-top: 0px;
 }
 
 .hello {
@@ -375,7 +377,7 @@ canvas {
 }
 
 .hello h3 {
-  color: #e3b062;
+  color: #F8BD49;
   font-weight: 300;
   font-size: 1.2rem;
 }
@@ -386,8 +388,8 @@ canvas {
 
 .btn-nav {
   width: 40%;
-  color: white;
-  background-color: #e6005a;
+  color: #e2602e;
+  background-color: #F8BD49;
   border-radius: 5px;
   text-align: center;
   padding: 2% 5%;
@@ -396,14 +398,14 @@ canvas {
 .btn-nav-white {
   width: 40%;
   background-color: white;
-  border: 3px solid #e6005a;
+  border: 3px solid #F8BD49;
   border-radius: 5px;
   text-align: center;
   padding: 2% 5%;
 }
 
 .btn-nav-white h3 {
-  color: #e6005a;
+  color: #F8BD49;
   padding: 0;
   margin: 0;
 }
@@ -418,11 +420,73 @@ canvas {
   margin: 0;
   padding: 0;
   width: 20%;
-  background-color: #32b9cd;
+  background-color: #E2602E;
   color: white;
   border-radius: 10px;
   text-align: center;
   padding: 10px 15px;
   margin-bottom: 100px;
+  cursor: pointer;
+}
+
+.quadro-img {
+  height: 150px;
+  width: auto;
+  margin-bottom: 0;
+}
+
+.quiz-container {
+  width: 60%;
+  margin: 40px auto;
+  background-color: #F8BD49;
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.titulo-quiz {
+  color: black;
+  letter-spacing: 2px;
+  font-family: 'Friends', sans-serif;
+}
+
+#timer {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #ff7043;
+}
+
+#opcoes button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #e6005a;
+  color: white;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#opcoes button:hover {
+  transform: scale(1.05);
+  background-color: #ff2d7a;
+}
+
+#feedback {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#btnProxima {
+  margin-top: 20px;
+  background-color: #F8BD49;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
 }

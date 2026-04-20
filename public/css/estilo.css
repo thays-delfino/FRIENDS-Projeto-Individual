@@ -329,7 +329,7 @@ body {
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('/public/assets/bannerLogin.png');
+  background-image: url('../assets/bannerLogin.png');
   background-size: cover;
   position: relative;
 }
@@ -345,7 +345,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
-   position: relative; /* adiciona isso */
+   position: relative;
   z-index: 1; 
 }
 
@@ -365,6 +365,7 @@ body {
 .card h2 {
   margin: 0;
   font-size: 30px;
+  font-family: 'Friends', sans-serif;
 }
 
 .formulario {

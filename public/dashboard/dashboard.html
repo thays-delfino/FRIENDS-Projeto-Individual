@@ -6,57 +6,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRIENDS | Teste Personalidade</title>
+    <title>FRIENDS | Quiz</title>
 
-    
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="stylesheet" href="./../css/estilo.css" />
-    <script src="../js/sessao.js"></script>
-    <script src="./../js/alerta.js"></script>
 
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-
-    <!-- scripts do Chart.js - 2022-1 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!--FONT AWESOME-->
-    <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
 
-<!-- <body onload=" atualizarFeed()"> -->
-
-<body>
+<body onload="iniciarTeste()">
 
     <div class="janela">
-        <div class="header-left">
+
+        <div class="header-left dash-header">
+
             <img src="../assets/quadro.png" alt="" class="quadro-img">
             <h1 class="titulo">
-          F<span class="ponto1"> •</span>
-          R<span class="ponto2"> •</span>
-          I<span class="ponto3"> •</span>
-          E<span class="ponto4"> •</span>
-          N<span class="ponto5"> •</span>
-          D<span class="ponto6"> •</span>
-          S
-        </h1>
+                F<span class="ponto1"> •</span>
+                R<span class="ponto2"> •</span>
+                I<span class="ponto3"> •</span>
+                E<span class="ponto4"> •</span>
+                N<span class="ponto5"> •</span>
+                D<span class="ponto6"> •</span>
+                S
+            </h1>
 
             <div class="hello">
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
             <div class="btn-nav-white">
-                <a href="./cards.html">
+                <a href="./quiz.html">
                     <h3>Quiz</h3>
                 </a>
             </div>
 
             <div class="btn-nav">
-
                 <h3>Teste Personalidade</h3>
-
             </div>
 
             <div class="btn-nav-white">
@@ -71,257 +62,269 @@
 
         </div>
 
-        <div class="dash">
-            <div id="alerta">
-            </div>
+        <div class="app">
+            <div class="quiz-container">
+                <h2 class="titulo-quiz">
+                    T<span class="ponto1">•</span>E<span class="ponto2">•</span>S<span class="ponto3">•</span>T<span
+                        class="ponto4">•</span>E&nbsp;
+                    D<span class="ponto5">•</span>E&nbsp;
+                    P<span class="ponto6">•</span>E<span class="ponto1">•</span>R<span class="ponto2">•</span>S<span
+                        class="ponto3">•</span>O<span class="ponto4">•</span>N<span class="ponto5">•</span>A<span
+                        class="ponto6">•</span>L<span class="ponto1">•</span>I<span class="ponto2">•</span>D<span
+                        class="ponto3">•</span>A<span class="ponto4">•</span>D<span class="ponto5">•</span>E</h2>
+                <div class="quiz">
+                    <h2 id="question"></h2>
+                    <div id="answer-buttons"></div>
+                </div>
+                <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
 
-            <div class="btns-dash" id="btnAquario">
-                <!-- O gráfico é chamado de acordo com o id (fk_aquario) do banco  -->
-            </div>
-            <div id="graficos">
             </div>
         </div>
     </div>
 
+    <script>
+
+        // cada resposta tem um "personagem" — a letra indica quem é
+        // a = Monica, b = Chandler, c = Ross, d = Rachel, e = Joey, f = Phoebe
+        var perguntas = [
+            {
+                pergunta: "Como você age em uma festa?",
+                respostas: [
+                    { texto: "Organizo tudo e me certifico que está perfeito", personagem: "Monica" },
+                    { texto: "Fico fazendo piadas para animar o pessoal", personagem: "Chandler" },
+                    { texto: "Fico falando sobre meu assunto favorito", personagem: "Ross" },
+                    { texto: "Cuido do visual e chego arrasando", personagem: "Rachel" },
+                    { texto: "Como tudo que tem na mesa", personagem: "Joey" },
+                    { texto: "Toco violão e canto músicas que escrevi", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Qual é o seu maior defeito?",
+                respostas: [
+                    { texto: "Sou muito perfeccionista e competitiva", personagem: "Monica" },
+                    { texto: "Uso o humor para evitar conversas sérias", personagem: "Chandler" },
+                    { texto: "Falo demais sobre coisas que ninguém liga", personagem: "Ross" },
+                    { texto: "Penso muito em mim mesma às vezes", personagem: "Rachel" },
+                    { texto: "Sou um pouco ingênuo e distraído", personagem: "Joey" },
+                    { texto: "Vivo no meu mundo e às vezes confundo as pessoas", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "O que você faz no fim de semana?",
+                respostas: [
+                    { texto: "Cozinho pratos elaborados para os amigos", personagem: "Monica" },
+                    { texto: "Assisto séries e faço piadas sobre elas", personagem: "Chandler" },
+                    { texto: "Vou a museus ou leio livros de ciência", personagem: "Ross" },
+                    { texto: "Vou às compras ou a um spa", personagem: "Rachel" },
+                    { texto: "Como um bom sanduíche e assisto futebol", personagem: "Joey" },
+                    { texto: "Toco música ou faço meditação", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Como você reage quando perde uma discussão?",
+                respostas: [
+                    { texto: "Não aceito, preciso ganhar sempre", personagem: "Monica" },
+                    { texto: "Faço uma piada para disfarçar", personagem: "Chandler" },
+                    { texto: "Busco um livro para provar que estou certo", personagem: "Ross" },
+                    { texto: "Fico na minha e finjo que não ligo", personagem: "Rachel" },
+                    { texto: "Já nem lembro do que era a discussão", personagem: "Joey" },
+                    { texto: "Mando energias positivas para todo mundo", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Como você demonstra amor pelos amigos?",
+                respostas: [
+                    { texto: "Cozinho para eles e cuido da casa", personagem: "Monica" },
+                    { texto: "Faço piadas para animá-los quando estão tristes", personagem: "Chandler" },
+                    { texto: "Dou conselhos baseados em fatos e ciência", personagem: "Ross" },
+                    { texto: "Ajudo a escolher roupas e cuido da aparência deles", personagem: "Rachel" },
+                    { texto: "Compartilho minha comida — e é muito amor", personagem: "Joey" },
+                    { texto: "Canto músicas especiais para cada um", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Qual seria seu emprego ideal?",
+                respostas: [
+                    { texto: "Chef de cozinha em um restaurante famoso", personagem: "Monica" },
+                    { texto: "Analista financeiro ou algo parecido", personagem: "Chandler" },
+                    { texto: "Paleontólogo ou professor universitário", personagem: "Ross" },
+                    { texto: "Executiva de moda ou estilista", personagem: "Rachel" },
+                    { texto: "Ator ou qualquer coisa que apareça na TV", personagem: "Joey" },
+                    { texto: "Massagista ou músico independente", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "O que você faz quando está estressado?",
+                respostas: [
+                    { texto: "Limpo a casa compulsivamente", personagem: "Monica" },
+                    { texto: "Faço piadas sem parar", personagem: "Chandler" },
+                    { texto: "Começo a falar sobre dinossauros", personagem: "Ross" },
+                    { texto: "Vou às compras para me sentir melhor", personagem: "Rachel" },
+                    { texto: "Como alguma coisa gostosa", personagem: "Joey" },
+                    { texto: "Medito ou escrevo uma música nova", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Se algo dá errado no último minuto, como você reage?",
+                respostas: [
+                    { texto: "Tento resolver rapidamente e deixar tudo perfeito", personagem: "Monica" },
+                    { texto: "Faço piada da situação pra aliviar o clima", personagem: "Chandler" },
+                    { texto: "Analiso o que deu errado e explico tudo", personagem: "Ross" },
+                    { texto: "Fico frustrado(a), mas tento manter a postura", personagem: "Rachel" },
+                    { texto: "Dou risada e sigo em frente", personagem: "Joey" },
+                    { texto: "Acredito que tudo acontece por um motivo", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Como você age em um relacionamento?",
+                respostas: [
+                    { texto: "Sou dedicada e quero que tudo seja perfeito", personagem: "Monica" },
+                    { texto: "Tenho medo de me comprometer, mas no fundo amo", personagem: "Chandler" },
+                    { texto: "Me apaixono intensamente e fico obcecado", personagem: "Ross" },
+                    { texto: "Demorei para crescer, mas me tornei independente", personagem: "Rachel" },
+                    { texto: "Sou leal e protetor dos que amo", personagem: "Joey" },
+                    { texto: "Acredito em almas gêmeas e energias do universo", personagem: "Phoebe" }
+                ]
+            },
+            {
+                pergunta: "Qual é a sua maior qualidade?",
+                respostas: [
+                    { texto: "Sou extremamente dedicada e organizada", personagem: "Monica" },
+                    { texto: "Consigo fazer qualquer um sorrir", personagem: "Chandler" },
+                    { texto: "Sou inteligente e muito bem informado", personagem: "Ross" },
+                    { texto: "Evoluí muito e sei o que quero da vida", personagem: "Rachel" },
+                    { texto: "Sou leal e nunca abandono um amigo", personagem: "Joey" },
+                    { texto: "Sou autêntica e não ligo para o julgamento alheio", personagem: "Phoebe" }
+                ]
+            }
+        ];
+
+        // contadores de votos para cada personagem
+        var votos = {
+            Monica: 0,
+            Chandler: 0,
+            Ross: 0,
+            Rachel: 0,
+            Joey: 0,
+            Phoebe: 0
+        };
+
+        var perguntaAtual = 0; // controla qual pergunta está sendo exibida
+        var jaRespondeu = false; // impede clicar duas vezes
+
+        function iniciarTeste() {
+            perguntaAtual = 0;
+            jaRespondeu = false;
+
+            // zera todos os votos
+            votos.Monica = 0;
+            votos.Chandler = 0;
+            votos.Ross = 0;
+            votos.Rachel = 0;
+            votos.Joey = 0;
+            votos.Phoebe = 0;
+
+            document.getElementById("btnProxima").style.display = "none";
+            mostrarPergunta();
+        }
+
+        function mostrarPergunta() {
+            jaRespondeu = false;
+
+            var divBotoes = document.getElementById("answer-buttons");
+            divBotoes.innerHTML = "";
+
+            document.getElementById("question").innerText = perguntas[perguntaAtual].pergunta;
+
+            for (var i = 0; i < perguntas[perguntaAtual].respostas.length; i++) {
+
+                var btn = document.createElement("button");
+
+                btn.innerText = perguntas[perguntaAtual].respostas[i].texto;
+
+                btn.className = "btn-quiz";
+
+                btn.setAttribute("data-personagem", perguntas[perguntaAtual].respostas[i].personagem); // salva o personagem no botão
+
+                btn.onclick = selecionarResposta;
+                divBotoes.appendChild(btn);
+            }
+
+            document.getElementById("btnProxima").style.display = "none";
+        }
+
+        function selecionarResposta() {
+            if (jaRespondeu) return;
+            jaRespondeu = true;
+
+            var personagemEscolhido = this.getAttribute("data-personagem"); // pega o personagem do botão clicado
+            votos[personagemEscolhido]++; // soma 1 voto para esse personagem
+
+            this.classList.add("correct"); // destaca o botão clicado
+
+            // desabilita todos os botões com FOR
+            var botoes = document.getElementById("answer-buttons").children;
+            for (var i = 0; i < botoes.length; i++) {
+                botoes[i].disabled = true;
+            }
+
+            document.getElementById("btnProxima").style.display = "block";
+        }
+
+        function proximaPergunta() {
+            perguntaAtual++;
+
+            if (perguntaAtual < perguntas.length) {
+                mostrarPergunta();
+            } else {
+                mostrarResultado();
+            }
+        }
+
+        function mostrarResultado() {
+            document.getElementById("answer-buttons").innerHTML = "";
+            document.getElementById("btnProxima").style.display = "none";
+
+            var personagens = [
+                { nome: "Monica", imagem: "../assets/monica.png", descricao: "Você é perfeccionista, competitiva e ama cuidar de todos!" },
+                { nome: "Chandler", imagem: "../assets/chandler.png", descricao: "Você usa o humor para tudo, mas tem um coração enorme!" },
+                { nome: "Ross", imagem: "../assets/ross.png", descricao: "Você é inteligente, apaixonado e um pouco dramático!" },
+                { nome: "Rachel", imagem: "../assets/rachel.png", descricao: "Você evoluiu muito e sabe exatamente o que quer da vida!" },
+                { nome: "Joey", imagem: "../assets/joey.png", descricao: "Você é leal, engraçado e ama uma boa comida!" },
+                { nome: "Phoebe", imagem: "../assets/phoebe.png", descricao: "Você é autêntica, criativa e vive no seu próprio mundo!" }
+            ];
+
+            var contagem = [votos.Monica, votos.Chandler, votos.Ross, votos.Rachel, votos.Joey, votos.Phoebe];
+
+            var indiceMaior = 0; // declara FORA do for
+
+            for (var i = 1; i < contagem.length; i++) {
+                if (contagem[i] > contagem[indiceMaior]) {
+                    indiceMaior = i;
+                }
+            }
+
+            var vencedor = personagens[indiceMaior];
+
+            document.getElementById("question").innerHTML =
+                "<img src='" + vencedor.imagem + "' style='width: 200px; border-radius: 10px;'>" +
+                "<br> Você é " + vencedor.nome + "!" +
+                "<br><p>" + vencedor.descricao + "</p>";
+
+            var idUsuario = sessionStorage.ID_USUARIO;
+
+            fetch("/personalidade/salvar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    idUsuario: idUsuario,
+                    personagem: vencedor.nome
+                })
+            });
+        }
+
+    </script>
 
 </body>
 
 </html>
-
-<script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
-
-    let proximaAtualizacao;
-
-    window.onload = exibirAquariosDoUsuario();
-
-    function exibirAquariosDoUsuario() {
-        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
-        aquarios.forEach(item => {
-            document.getElementById("btnAquario").innerHTML += `
-            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
-            `
-
-            document.getElementById("graficos").innerHTML += `
-                <div id="grafico${item.id}" class="display-none">
-                    <h3 class="tituloGraficos">
-                        <span id="tituloAquario${item.id}">${item.descricao}</span>
-                    </h3>
-                    <div class="graph">
-                        <canvas id="myChartCanvas${item.id}"></canvas>
-                    </div>
-                    <div class="label-captura">
-                        <p id="avisoCaptura${item.id}" style="color: white"></p>
-                    </div>
-                </div>
-            `
-
-            obterDadosGrafico(item.id)
-        });
-
-        if (aquarios.length > 0) {
-            exibirAquario(aquarios[0].id)
-        }
-    }
-
-    function alterarTitulo(idAquario) {
-        var tituloAquario = document.getElementById(`tituloAquario${idAquario}`)
-        var descricao = JSON.parse(sessionStorage.AQUARIOS).find(item => item.id == idAquario).descricao;
-        tituloAquario.innerHTML = "Últimas medidas de Temperatura e Umidade do <span style='color: #e6005a'>" + descricao + "</span>"
-    }
-
-    function exibirAquario(idAquario) {
-        let todosOsGraficos = JSON.parse(sessionStorage.AQUARIOS);
-
-        for (i = 0; i < todosOsGraficos.length; i++) {
-            // exibindo - ou não - o gráfico
-            if (todosOsGraficos[i].id != idAquario) {
-                let elementoAtual = document.getElementById(`grafico${todosOsGraficos[i].id}`)
-                if (elementoAtual.classList.contains("display-block")) {
-                    elementoAtual.classList.remove("display-block")
-                }
-                elementoAtual.classList.add("display-none")
-
-                // alterando estilo do botão
-                let btnAtual = document.getElementById(`btnAquario${todosOsGraficos[i].id}`)
-                if (btnAtual.classList.contains("btn-pink")) {
-                    btnAtual.classList.remove("btn-pink")
-                }
-                btnAtual.classList.add("btn-white")
-            }
-        }
-
-        // exibindo - ou não - o gráfico
-        let graficoExibir = document.getElementById(`grafico${idAquario}`)
-        graficoExibir.classList.remove("display-none")
-        graficoExibir.classList.add("display-block")
-
-        // alterando estilo do botão
-        let btnExibir = document.getElementById(`btnAquario${idAquario}`)
-        btnExibir.classList.remove("btn-white")
-        btnExibir.classList.add("btn-pink")
-    }
-
-    // O gráfico é construído com três funções:
-    // 1. obterDadosGrafico -> Traz dados do Banco de Dados para montar o gráfico da primeira vez
-    // 2. plotarGrafico -> Monta o gráfico com os dados trazidos e exibe em tela
-    // 3. atualizarGrafico -> Atualiza o gráfico, trazendo novamente dados do Banco
-
-    // Esta função *obterDadosGrafico* busca os últimos dados inseridos em tabela de medidas.
-    // para, quando carregar o gráfico da primeira vez, já trazer com vários dados.
-    // A função *obterDadosGrafico* também invoca a função *plotarGrafico*
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function obterDadosGrafico(idAquario) {
-
-        alterarTitulo(idAquario)
-
-        if (proximaAtualizacao != undefined) {
-            clearTimeout(proximaAtualizacao);
-        }
-
-        fetch(`/medidas/ultimas/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
-                    plotarGrafico(resposta, idAquario);
-
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-    }
-
-    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
-    function plotarGrafico(resposta, idAquario) {
-
-        console.log('iniciando plotagem do gráfico...');
-
-        // Criando estrutura para plotar gráfico - labels
-        let labels = [];
-
-        // Criando estrutura para plotar gráfico - dados
-        let dados = {
-            labels: labels,
-            datasets: [{
-                label: 'Umidade',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            },
-            {
-                label: 'Temperatura',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(199, 52, 52)',
-                tension: 0.1
-            }]
-        };
-
-        console.log('----------------------------------------------')
-        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-        console.log(resposta)
-
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
-        for (i = 0; i < resposta.length; i++) {
-            var registro = resposta[i];
-            labels.push(registro.momento_grafico);
-            dados.datasets[0].data.push(registro.umidade);
-            dados.datasets[1].data.push(registro.temperatura);
-        }
-
-        console.log('----------------------------------------------')
-        console.log('O gráfico será plotado com os respectivos valores:')
-        console.log('Labels:')
-        console.log(labels)
-        console.log('Dados:')
-        console.log(dados.datasets)
-        console.log('----------------------------------------------')
-
-        // Criando estrutura para plotar gráfico - config
-        const config = {
-            type: 'line',
-            data: dados,
-        };
-
-        // Adicionando gráfico criado em div na tela
-        let myChart = new Chart(
-            document.getElementById(`myChartCanvas${idAquario}`),
-            config
-        );
-
-        setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-    }
-
-
-    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-    // buscando a última medida inserida em tabela contendo as capturas, 
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function atualizarGrafico(idAquario, dados, myChart) {
-
-
-
-        fetch(`/medidas/tempo-real/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (novoRegistro) {
-
-                    obterdados(idAquario);
-                    // alertar(novoRegistro, idAquario);
-                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-                    console.log(`Dados atuais do gráfico:`);
-                    console.log(dados);
-
-                    let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-                    avisoCaptura.innerHTML = ""
-
-
-                    if (novoRegistro[0].momento_grafico == dados.labels[dados.labels.length - 1]) {
-                        console.log("---------------------------------------------------------------")
-                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        console.log("Horário do novo dado capturado:")
-                        console.log(novoRegistro[0].momento_grafico)
-                        console.log("Horário do último dado capturado:")
-                        console.log(dados.labels[dados.labels.length - 1])
-                        console.log("---------------------------------------------------------------")
-                    } else {
-                        // tirando e colocando valores no gráfico
-                        dados.labels.shift(); // apagar o primeiro
-                        dados.labels.push(novoRegistro[0].momento_grafico); // incluir um novo momento
-
-                        dados.datasets[0].data.shift();  // apagar o primeiro de umidade
-                        dados.datasets[0].data.push(novoRegistro[0].umidade); // incluir uma nova medida de umidade
-
-                        dados.datasets[1].data.shift();  // apagar o primeiro de temperatura
-                        dados.datasets[1].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
-                        myChart.update();
-                    }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-
-    }
-</script>

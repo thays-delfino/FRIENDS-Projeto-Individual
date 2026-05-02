@@ -4,3 +4,5 @@ package-lock.json
 
 .github
 web-data-viz/
+.env.dev
+.env

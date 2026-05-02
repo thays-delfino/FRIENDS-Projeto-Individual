@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="icon" href="/assets/quadro.png">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRIENDS | Quiz</title>
+
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="stylesheet" href="./../css/estilo.css" />
+
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body onload="iniciarQuiz()">
+
+    <div class="janela">
+
+        <div class="header-left dash-header">
+
+            <img src="../assets/quadro.png" alt="" class="quadro-img">
+            <h1 class="titulo">
+                F<span class="ponto1"> •</span>
+                R<span class="ponto2"> •</span>
+                I<span class="ponto3"> •</span>
+                E<span class="ponto4"> •</span>
+                N<span class="ponto5"> •</span>
+                D<span class="ponto6"> •</span>
+                S
+            </h1>
+
+            <div class="hello">
+                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
+            </div>
+
+            <div class="btn-nav">
+                <h3>Quiz</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./dashboard.html">
+                    <h3>Teste Personalidade</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./mural.html">
+                    <h3>Dashboards</h3>
+                </a>
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+
+        </div>
+
+        <div class="app">
+            <div class="quiz-container">
+                <h2 class="titulo-quiz">
+                    Q<span class="ponto1">•</span>u<span class="ponto2">•</span>i<span class="ponto3">•</span>z&nbsp;
+                    d<span class="ponto4">•</span>e&nbsp;
+                    F<span class="ponto5">•</span>r<span class="ponto6">•</span>i<span class="ponto1">•</span>e<span
+                        class="ponto2">•</span>n<span class="ponto3">•</span>d<span class="ponto4">•</span>s</h2>
+                <div class="quiz">
+                    <h2 id="question"></h2>
+                    <div id="answer-buttons"></div>
+                </div>
+                <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const questions = [
+            {
+                question: "Quem disse: 'We were on a break!'?",
+                answers: [
+                    { texto: "Ross", correta: true },
+                    { texto: "Chandler", correta: false },
+                    { texto: "Joey", correta: false },
+                    { texto: "Monica", correta: false }
+                ]
+            },
+            {
+                question: "Qual o nome do café?",
+                answers: [
+                    { texto: "Central Perk", correta: true },
+                    { texto: "Coffee NY", correta: false },
+                    { texto: "Friends Café", correta: false },
+                    { texto: "Perk House", correta: false }
+                ]
+            },
+            {
+                question: "Quem é chef de cozinha?",
+                answers: [
+                    { texto: "Rachel", correta: false },
+                    { texto: "Phoebe", correta: false },
+                    { texto: "Monica", correta: true },
+                    { texto: "Janice", correta: false }
+                ]
+            }
+        ];
+
+        var perguntaAtual = 0;   // guarda o número da pergunta atual (começa na primeira, índice 0)
+        var pontuacao = 0;       // guarda quantas respostas o usuário acertou
+        var jaRespondeu = false; // controla se o usuário já clicou em alguma resposta
+
+        function iniciarQuiz() {
+            perguntaAtual = 0;   // volta para a primeira pergunta
+            pontuacao = 0;       // zera a pontuação
+            jaRespondeu = false; // libera para responder de novo
+            document.getElementById("btnProxima").style.display = "none"; // esconde o botão "Próxima" no início
+            mostrarPergunta(); // chama a função que exibe a pergunta na tela
+        }
+
+        function mostrarPergunta() {
+            jaRespondeu = false; // libera o clique para a nova pergunta
+
+            var divBotoes = document.getElementById("answer-buttons"); // pega a div onde ficam os botões de resposta
+            divBotoes.innerHTML = ""; // apaga os botões da pergunta anterior
+
+            document.getElementById("question").innerText = questions[perguntaAtual].question; // escreve o texto da pergunta atual na tela
+
+            for (var i = 0; i < questions[perguntaAtual].answers.length; i++) { // percorre cada resposta da pergunta atual
+                var btn = document.createElement("button");                               // cria um botão novo
+                btn.innerText = questions[perguntaAtual].answers[i].texto;                // coloca o texto da resposta no botão
+                btn.className = "btn-quiz";                                               // aplica o estilo CSS do botão
+                btn.setAttribute("data-correta", questions[perguntaAtual].answers[i].correta); // salva no botão se ele é a resposta certa (true/false)
+                btn.onclick = verificarResposta;                                          // define que ao clicar, chama a função verificarResposta
+                divBotoes.appendChild(btn);                                               // adiciona o botão dentro da div na tela
+            }
+
+            document.getElementById("btnProxima").style.display = "none"; // garante que o botão "Próxima" continua escondido
+        }
+
+        function verificarResposta() {
+            if (jaRespondeu) return; // se já clicou antes, ignora o clique e sai da função
+            jaRespondeu = true;      // marca que o usuário já respondeu essa pergunta
+
+            var correta = this.getAttribute("data-correta") === "true"; // lê se o botão clicado é a resposta certa
+
+            if (correta) {                      // se acertou...
+                pontuacao++;                    // soma 1 ponto
+                this.classList.add("correct"); // pinta o botão de verde
+            } else {                            // se errou...
+                this.classList.add("incorrect"); // pinta o botão clicado de vermelho
+
+                var botoes = document.getElementById("answer-buttons").children; // pega todos os botões de resposta
+                for (var i = 0; i < botoes.length; i++) {                        // percorre cada botão
+                    if (botoes[i].getAttribute("data-correta") === "true") {     // se for o botão correto...
+                        botoes[i].classList.add("correct");                      // pinta ele de verde para mostrar qual era a certa
+                    }
+                }
+            }
+
+            var botoes = document.getElementById("answer-buttons").children; // pega todos os botões novamente
+            for (var i = 0; i < botoes.length; i++) { // percorre cada botão
+                botoes[i].disabled = true;             // desabilita todos para não deixar clicar de novo
+            }
+
+            document.getElementById("btnProxima").style.display = "block"; // mostra o botão "Próxima" para o usuário avançar
+        }
+
+        function proximaPergunta() {
+            perguntaAtual++; // avança para a próxima pergunta (incrementa o índice)
+
+            if (perguntaAtual < questions.length) { // se ainda há perguntas...
+                mostrarPergunta();                  // exibe a próxima pergunta
+            } else {                               // se acabaram as perguntas...
+                mostrarResultado();                // exibe o resultado final
+            }
+        }
+
+        function mostrarResultado() {
+            document.getElementById("answer-buttons").innerHTML = "";
+            document.getElementById("btnProxima").style.display = "none";
+            document.getElementById("question").innerText =
+                "Você acertou " + pontuacao + " de " + questions.length + "!";
+
+            var idUsuario = sessionStorage.ID_USUARIO; // pega o id salvo no login
+
+            fetch("/quiz/salvar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    idUsuario: idUsuario,
+                    pontuacao: pontuacao,
+                    total: questions.length
+                })
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

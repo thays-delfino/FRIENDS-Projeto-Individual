@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FRIENDS</title>
+
+  <script src="./js/sessao.js"></script>
+
+  <link rel="stylesheet" href="./css/estilo.css">
+  <link rel="stylesheet" href="./css/dashboards.css">
+  <link rel="icon" href="assets/quadro.png">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="container">
+      <div class="titulo-container">
+        <img src="assets/quadro.png" alt="" class="titulo-img">
+        <h1 class="titulo">
+          F<span class="ponto1"> •</span>
+          R<span class="ponto2"> •</span>
+          I<span class="ponto3"> •</span>
+          E<span class="ponto4"> •</span>
+          N<span class="ponto5"> •</span>
+          D<span class="ponto6"> •</span>
+          S
+        </h1>
+      </div>
+      <ul class="navbar">
+        <li class="agora"><a href="index.html">Inicial</a></li>
+        <li><a href="index.html">Sobre</a></li>
+        <li><a href="index.html">Personagens</a></li>
+        <li><a href="index.html">Locais</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li>|</li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="cadastro.html">Cadastro</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== DASHBOARD ===================== -->
+  <div class="dash-publica" id="dashboard">
+    <div class="container">
+
+      <h2 class="titulo-secao">
+        D<span class="ponto1">•</span>a<span class="ponto2">•</span>s<span class="ponto3">•</span>h<span
+          class="ponto4">•</span>b<span class="ponto5">•</span>o<span class="ponto6">•</span>a<span
+          class="ponto1">•</span>r<span class="ponto2">•</span>d
+      </h2>
+
+      <!-- KPIs -->
+      <div class="kpis">
+        <div class="kpi-card">
+          <p class="kpi-titulo">Total de Usuários </p>
+          <p class="kpi-valor" id="kpi-usuarios">-</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-titulo">Quantidade de Quizzes Jogados</p>
+          <p class="kpi-valor" id="kpi-quizzes">-</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-titulo">Quantidade de Testes de Personalidade Realizados</p>
+          <p class="kpi-valor" id="kpi-testes">-</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-titulo">Personagem Mais Popular</p>
+          <p class="kpi-valor" id="kpi-personagem">-</p>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="graficos-publicos">
+        <div class="grafico-card">
+          <h3>Personagens mais escolhidos</h3>
+          <canvas id="graficoPizza"></canvas>
+        </div>
+        <div class="grafico-card">
+          <h3>Quantidade de pessoas por personagem</h3>
+          <canvas id="graficoLinha"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- ===================== FIM DASHBOARD ===================== -->
+
+  <div class="footer">
+    <div class="container">
+      <img class="img-footer" src="assets/cat.png" alt="">
+      <img class="img-footer" src="assets/frango.png" alt="">
+      <img class="img-footer" src="assets/patoepintinho.png" alt="">
+      <img class="img-footer" src="assets/cj.png" alt="">
+      <img class="img-footer" src="assets/quadroFooter.png" alt="">
+      <img class="img-footer" src="assets/ohmygod.png" alt="">
+      <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023</h4>
+      <img class="img-footer" src="assets/hugsy.png" alt="">
+      <img class="img-footer" src="assets/rosstatu.png" alt="">
+      <img class="img-footer" src="assets/sofa.png" alt="">
+      <img class="img-footer" src="assets/lobster.png" alt="">
+      <img class="img-footer" src="assets/rcj.png" alt="">
+      <img class="img-footer" src="assets/pivot.png" alt="">
+    </div>
+  </div>
+</body>
+
+<script>
+
+  // busca os KPIs e preenche os cards
+  fetch("/dashboard/kpis")
+    .then(function (resposta) {
+      resposta.json().then(function (dados) {
+        document.getElementById("kpi-usuarios").innerText   = dados.totalUsuarios;
+        document.getElementById("kpi-quizzes").innerText    = dados.totalQuizzes;
+        document.getElementById("kpi-testes").innerText     = dados.totalTestes;
+        document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
+      });
+    });
+
+  // busca os dados e monta o gráfico de pizza
+  fetch("/dashboard/pizza")
+    .then(function (resposta) {
+      resposta.json().then(function (dados) {
+
+        var labels  = [];
+        var valores = [];
+
+        for (var i = 0; i < dados.length; i++) {
+          labels.push(dados[i].personagem);
+          valores.push(dados[i].total);
+        }
+
+        new Chart(document.getElementById("graficoPizza"), {
+          type: "pie",
+          data: {
+            labels: labels,
+            datasets: [{
+              data: valores,
+              backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
+            }]
+          }
+        });
+
+      });
+    });
+
+</script>
+
+</html>

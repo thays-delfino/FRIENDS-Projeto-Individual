@@ -1,23 +1,46 @@
 /* ===== DASHBOARD PÚBLICA ===== */
-.dash-publica {
-  background-color: #6553C9;
-  padding: 60px 0;
+
+.dash-publica .container {
+  position: relative;
+  z-index: 2;
+  width: 100%;    
+  max-width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0 40px;
 }
 
 .kpis {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   gap: 20px;
-  flex-wrap: wrap;
   margin-bottom: 40px;
+  width: 100%;
 }
 
 .kpi-card {
   background-color: #F8BD49;
   border-radius: 10px;
-  padding: 20px 30px;
+  padding: 20px;
   text-align: center;
-  min-width: 180px;
+  flex: 1;
+}
+
+.graficos-publicos {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
+  width: 20%;
+}
+
+.grafico-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .kpi-titulo {
@@ -32,22 +55,6 @@
   font-size: 2rem;
   font-weight: 800;
   margin: 0;
-}
-
-.graficos-publicos {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
-}
-
-.grafico-card {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 45%;
-  min-width: 300px;
-  text-align: center;
 }
 
 .grafico-card h3 {
@@ -74,12 +81,6 @@
   z-index: 1;
 }
 
-.dash-publica .container {
-  position: relative;
-  z-index: 2; /* deixa o conteúdo na frente */
-}
-
-
 .footer {
   background-color: #6553c9;
   height: 150px;
@@ -102,3 +103,4 @@
   width: auto;
   justify-content: space-between;
 }
+

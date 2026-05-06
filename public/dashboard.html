@@ -119,9 +119,9 @@
   fetch("/dashboard/kpis")
     .then(function (resposta) {
       resposta.json().then(function (dados) {
-        document.getElementById("kpi-usuarios").innerText   = dados.totalUsuarios;
-        document.getElementById("kpi-quizzes").innerText    = dados.totalQuizzes;
-        document.getElementById("kpi-testes").innerText     = dados.totalTestes;
+        document.getElementById("kpi-usuarios").innerText = dados.totalUsuarios;
+        document.getElementById("kpi-quizzes").innerText = dados.totalQuizzes;
+        document.getElementById("kpi-testes").innerText = dados.totalTestes;
         document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
       });
     });
@@ -131,7 +131,7 @@
     .then(function (resposta) {
       resposta.json().then(function (dados) {
 
-        var labels  = [];
+        var labels = [];
         var valores = [];
 
         for (var i = 0; i < dados.length; i++) {
@@ -147,6 +147,10 @@
               data: valores,
               backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
             }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true
           }
         });
 

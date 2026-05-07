@@ -50,6 +50,10 @@
   max-height: 400px;
 }
 
+#graficoLinha {
+  max-height: 400px;
+}
+
 .kpi-titulo {
   color: #212124;
   font-weight: 600;

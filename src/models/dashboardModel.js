@@ -21,5 +21,14 @@ function getGraficoPizza() {
     return database.executar(instrucaoSql);
 }
 
+function getPersonagens() {
+    var instrucaoSql = `
+        SELECT personagem, COUNT(*) AS total 
+        FROM resultado_personalidade 
+        GROUP BY personagem
+        ORDER BY total DESC;
+    `;
+    return database.executar(instrucaoSql);
+}
 
-module.exports = { getKpis, getGraficoPizza};
+module.exports = { getKpis, getGraficoPizza, getPersonagens };

@@ -157,6 +157,46 @@
       });
     });
 
+    fetch("/dashboard/personagens")
+  .then(function (resposta) {
+    resposta.json().then(function (dados) {
+
+      var labels  = [];
+      var valores = [];
+
+      for (var i = 0; i < dados.length; i++) {
+        labels.push(dados[i].personagem);
+        valores.push(dados[i].total);
+      }
+
+      new Chart(document.getElementById("graficoLinha"), {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Pessoas por personagem",
+            data: valores,
+            backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
+
+    });
+  });
+
 </script>
 
 </html>

@@ -12,4 +12,10 @@ function getGraficoPizza(req, res) {
         .catch(function (erro) { res.status(500).json(erro.sqlMessage); });
 }
 
-module.exports = { getKpis, getGraficoPizza };
+function getPersonagens(req, res) {
+    dashboardModel.getPersonagens()
+        .then(function (resultado) { res.json(resultado); })
+        .catch(function (erro) { res.status(500).json(erro.sqlMessage); });
+}
+
+module.exports = { getKpis, getGraficoPizza, getPersonagens };

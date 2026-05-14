@@ -1490,10 +1490,15 @@ canvas {
 
 
 /* quiz */
-.quiz h2{
+.quiz h2 {
   font-size: 25px;
   color: #212124;
   font-weight: 600;
+}
+
+.mensagemInicialQuiz{
+  color: black;
+  font-size: 25px;
 }
 
 
@@ -1541,4 +1546,29 @@ canvas {
 
 .btn-quiz:disabled{
   cursor: no-drop;
+}
+
+
+.btn-personagem {
+    display: inline-block;
+    width: 48%;
+    margin: 2%;
+}
+
+.btn-personagem.selecionado {
+    border: 3px solid #000;
+    background-color: #f0c040;
+    font-weight: bold;
+}
+
+#btnIniciar {
+    display: block;
+    margin: 16px auto 0;
+    background-color: #5b2d8e;
+    color: white;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
 }

@@ -19,7 +19,7 @@
         rel="stylesheet">
 </head>
 
-<body onload="iniciarTeste(); validarSessao()">
+<body onload="telaInicial(); validarSessao()">
 
     <div class="janela">
 
@@ -70,6 +70,10 @@
                     <h2 id="question"></h2>
                     <div id="answer-buttons"></div>
                 </div>
+                <h2 class=mensagemInicialQuiz id="mensagem"><br>Qual personagem de Friends você é? Descubra agora!</h2>
+                <img id="gifInicio" src="https://media1.tenor.com/m/vJkvdLaOgb0AAAAd/friends-friendstv.gif"
+                    alt="friends gif">
+                <button onclick="iniciarTeste()" id="btnIniciar">Iniciar Quiz</button>
                 <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
 
             </div>
@@ -78,9 +82,30 @@
 
     <script>
 
+        const personagens = [
+            { nome: "Ross" },
+            { nome: "Rachel" },
+            { nome: "Monica" },
+            { nome: "Chandler" },
+            { nome: "Joey" },
+            { nome: "Phoebe" }
+        ]
+
         // cada resposta tem um "personagem" — a letra indica quem é
         // a = Monica, b = Chandler, c = Ross, d = Rachel, e = Joey, f = Phoebe
         var perguntas = [
+            {
+                pergunta: "Antes de começar, com qual personagem você mais se identifica?",
+                respostas: [
+                    { texto: "Ross", personagem: "intro" },
+                    { texto: "Rachel", personagem: "intro" },
+                    { texto: "Monica", personagem: "intro" },
+                    { texto: "Chandler", personagem: "intro" },
+                    { texto: "Joey", personagem: "intro" },
+                    { texto: "Phoebe", personagem: "intro" }
+                ],
+                intro: true
+            },
             {
                 pergunta: "Como você age em uma festa?",
                 respostas: [
@@ -206,6 +231,12 @@
         var perguntaAtual = 0; // controla qual pergunta está sendo exibida
         var jaRespondeu = false; // impede clicar duas vezes
 
+        function telaInicial() {
+            document.getElementById("btnProxima").style.display = "none";
+            document.getElementById("btnIniciar").style.display = "block";
+            document.getElementById("gifInicio").style.display = "block";
+        }
+
         function iniciarTeste() {
             perguntaAtual = 0;
             jaRespondeu = false;
@@ -218,8 +249,22 @@
             votos.Joey = 0;
             votos.Phoebe = 0;
 
+            document.getElementById("mensagem").style.display = "none";
+            document.getElementById("btnIniciar").style.display = "none";
+            document.getElementById("gifInicio").style.display = "none";
             document.getElementById("btnProxima").style.display = "none";
+
             mostrarPergunta();
+        }
+
+        function avancar() {
+            if (telaInicio) {
+                telaInicio = false;
+                document.getElementById("btnIniciar").style.display = "none";
+                mostrarPergunta();
+            } else {
+                proximaPergunta();
+            }
         }
 
         function mostrarPergunta() {
@@ -252,7 +297,9 @@
             jaRespondeu = true;
 
             var personagemEscolhido = this.getAttribute("data-personagem"); // pega o personagem do botão clicado
-            votos[personagemEscolhido]++; // soma 1 voto para esse personagem
+            if (personagemEscolhido != "intro") {   // só conta voto se não for a intro
+                votos[personagemEscolhido]++;
+            }
 
             this.classList.add("correct"); // destaca o botão clicado
 
@@ -280,17 +327,17 @@
             document.getElementById("btnProxima").style.display = "none";
 
             var personagens = [
-                { nome: "Monica", imagem: "../assets/monica.png", descricao: "Você é perfeccionista, competitiva e ama cuidar de todos!" },
-                { nome: "Chandler", imagem: "../assets/chandler.png", descricao: "Você usa o humor para tudo, mas tem um coração enorme!" },
-                { nome: "Ross", imagem: "../assets/ross.png", descricao: "Você é inteligente, apaixonado e um pouco dramático!" },
-                { nome: "Rachel", imagem: "../assets/rachel.png", descricao: "Você evoluiu muito e sabe exatamente o que quer da vida!" },
-                { nome: "Joey", imagem: "../assets/joey.png", descricao: "Você é leal, engraçado e ama uma boa comida!" },
-                { nome: "Phoebe", imagem: "../assets/phoebe.png", descricao: "Você é autêntica, criativa e vive no seu próprio mundo!" }
+                { nome: "Monica", imagem: "../assets/gifMonica.gif", descricao: "Você é perfeccionista, competitiva e ama cuidar de todos!" },
+                { nome: "Chandler", imagem: "../assets/gifChandler.gif", descricao: "Você usa o humor para tudo, mas tem um coração enorme!" },
+                { nome: "Ross", imagem: "../assets/gifRoss.gif", descricao: "Você é inteligente, apaixonado e um pouco dramático!" },
+                { nome: "Rachel", imagem: "../assets/gifRachel.gif", descricao: "Você evoluiu muito e sabe exatamente o que quer da vida!" },
+                { nome: "Joey", imagem: "../assets/gifJoey.gif", descricao: "Você é leal, engraçado e ama uma boa comida!" },
+                { nome: "Phoebe", imagem: "../assets/gifPhoebe.gif", descricao: "Você é autêntica, criativa e vive no seu próprio mundo!" }
             ];
 
             var contagem = [votos.Monica, votos.Chandler, votos.Ross, votos.Rachel, votos.Joey, votos.Phoebe];
 
-            var indiceMaior = 0; // declara FORA do for
+            var indiceMaior = 0;
 
             for (var i = 1; i < contagem.length; i++) {
                 if (contagem[i] > contagem[indiceMaior]) {
@@ -301,9 +348,9 @@
             var vencedor = personagens[indiceMaior];
 
             document.getElementById("question").innerHTML =
-                "<img src='" + vencedor.imagem + "' style='width: 200px; border-radius: 10px;'>" +
-                "<br> Você é " + vencedor.nome + "!" +
-                "<br><p>" + vencedor.descricao + "</p>";
+                "Você é " + vencedor.nome + "!" + 
+                "<br><br><img src='" + vencedor.imagem + "' style='width: 800px; border-radius: 10px;'>" +
+                "<br><p style='font-size: 25px;''>" + vencedor.descricao + "</p>";
 
             var idUsuario = sessionStorage.ID_USUARIO;
 

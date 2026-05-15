@@ -1572,3 +1572,8 @@ canvas {
     font-size: 1rem;
     cursor: pointer;
 }
+
+#gifInicio{
+  display: block;
+  margin: 0 auto;
+}

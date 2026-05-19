@@ -81,6 +81,7 @@
     </div>
 
     <script>
+        var identificacao = "";
 
         const personagens = [
             { nome: "Ross" },
@@ -296,14 +297,16 @@
             if (jaRespondeu) return;
             jaRespondeu = true;
 
-            var personagemEscolhido = this.getAttribute("data-personagem"); // pega o personagem do botão clicado
-            if (personagemEscolhido != "intro") {   // só conta voto se não for a intro
+            var personagemEscolhido = this.getAttribute("data-personagem");
+
+            if (personagemEscolhido == "intro") {
+                identificacao = this.innerText; // salva o personagem da intro
+            } else {
                 votos[personagemEscolhido]++;
             }
 
-            this.classList.add("correct"); // destaca o botão clicado
+            this.classList.add("correct");
 
-            // desabilita todos os botões com FOR
             var botoes = document.getElementById("answer-buttons").children;
             for (var i = 0; i < botoes.length; i++) {
                 botoes[i].disabled = true;
@@ -348,7 +351,7 @@
             var vencedor = personagens[indiceMaior];
 
             document.getElementById("question").innerHTML =
-                "Você é " + vencedor.nome + "!" + 
+                "Você é " + vencedor.nome + "!" +
                 "<br><br><img src='" + vencedor.imagem + "' style='width: 800px; border-radius: 10px;'>" +
                 "<br><p style='font-size: 25px;''>" + vencedor.descricao + "</p>";
 
@@ -359,7 +362,8 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     idUsuario: idUsuario,
-                    personagem: vencedor.nome
+                    personagem: vencedor.nome,
+                    identificacao: identificacao
                 })
             });
         }

@@ -68,8 +68,10 @@
                     <h2 id="question"></h2>
                     <div id="answer-buttons"></div>
                 </div>
-                <h2 class= mensagemInicialQuiz id="mensagem">Olá friend! <br>Será que você é fã de verdade? Vamos descobrir!</h2>
-                <img id="gifInicio" src="https://media1.tenor.com/m/qv4vZrGyK-4AAAAC/friends-tv-friends.gif" alt="friends gif">
+                <h2 class=mensagemInicialQuiz id="mensagem">Olá friend! <br>Será que você é fã de verdade? Vamos
+                    descobrir!</h2>
+                <img id="gifInicio" src="https://media1.tenor.com/m/qv4vZrGyK-4AAAAC/friends-tv-friends.gif"
+                    alt="friends gif">
                 <button onclick="iniciarQuiz()" id="btnIniciar">Iniciar Quiz</button>
                 <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
             </div>
@@ -79,7 +81,7 @@
     <script>
 
         var perguntas = [
-            
+
             {
                 pergunta: "Quem disse: 'We were on a break!'?",
                 respostas: ["Ross", "Chandler", "Joey", "Monica"],
@@ -193,6 +195,29 @@
             document.getElementById("btnProxima").style.display = "none";
             document.getElementById("question").innerText =
                 "Você acertou " + pontuacao + " de " + perguntas.length + "!";
+
+            // pega o id do usuário que está na sessão
+            var idUsuario = sessionStorage.ID_USUARIO;
+            console.log("idUsuario:", idUsuario);
+            console.log("pontuacao:", pontuacao);  
+            fetch("/quiz/salvar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    idUsuario: idUsuario,
+                    pontuacao: pontuacao,
+                    total: perguntas.length
+                })
+            })
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(function (dados) {
+                    console.log("Resultado salvo!", dados);
+                })
+                .catch(function (erro) {
+                    console.log("Erro ao salvar:", erro);
+                });
         }
 
     </script>

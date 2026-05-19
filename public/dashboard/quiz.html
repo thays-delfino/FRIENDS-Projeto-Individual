@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="icon" href="/assets/quadro.png">
+    <link rel="icon" href="../assets/imgs/quadro.png">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,7 @@
 
         <div class="header-left dash-header">
 
-            <img src="../assets/quadro.png" alt="" class="quadro-img">
+            <img src="../assets/imgs/quadro.png" alt="" class="quadro-img">
             <h1 class="titulo">
                 F<span class="ponto1"> •</span>
                 R<span class="ponto2"> •</span>
@@ -81,22 +81,79 @@
     <script>
 
         var perguntas = [
-
             {
                 pergunta: "Quem disse: 'We were on a break!'?",
                 respostas: ["Ross", "Chandler", "Joey", "Monica"],
-                correta: 0
+                correta: 0,
+                imagem: ""
+
             },
             {
                 pergunta: "Qual o nome do café?",
                 respostas: ["Central Perk", "Coffee NY", "Friends Café", "Perk House"],
-                correta: 0
+                correta: 0,
+                imagem: "../assets/imgs/cafe.png"
             },
             {
                 pergunta: "Quem é chef de cozinha?",
                 respostas: ["Rachel", "Phoebe", "Monica", "Janice"],
-                correta: 2
-            }
+                correta: 2,
+                imagem: ""
+            },
+            {
+                pergunta: "Por que Marcel, o macaco do Ross, sai do zoológico?",
+                respostas: ["É roubado para trabalhar como ator", "Foge para encontrar Ross", "Briga com os outros macacos", "Aparece em um clipe de 'The Lion Sleeps Tonight'"],
+                correta: 3,
+                imagem: "../assets/imgs/rosseMacaco.png"
+            },
+            {
+                pergunta: "Complete a letra da música:<br><br> 'Smelly Cat' da Phoebe: 'Smelly cat, smelly cat, what are they feeding you? Smelly cat, smelly cat…'",
+                respostas: ["You don't deserve the zoo", "You smell of poo", "It's not your fault", "Come and have a bath"],
+                correta: 2,
+                imagem: "../assets/imgs/SmellyCat.png"
+            },
+            {
+                pergunta: "Quantas páginas tinha a carta que Rachel escreveu para Ross?",
+                respostas: ["10", "12", "15", "18"],
+                correta: 3,
+                imagem: "../assets/imgs/cartaRachel.png"
+            },
+            {
+                pergunta: "Por quem o Gunther do Central Perk é apaixonado?",
+                respostas: ["Rachel", "Chandler", "Phoebe", "Monica"],
+                correta: 0,
+                imagem: "../assets/imgs/gunther.png"
+            },
+            {
+                pergunta: "Joey mente sobre algo importante no seu currículo de ator. O que é?",
+                respostas: ["Que faz sotaque italiano", "Que fala francês", "Que bebe um litro de leite em 10 segundos", "Que sabe esquiar"],
+                correta: 1,
+                imagem: "../assets/imgs/joeyCurriculo.png"
+            },
+            {
+                pergunta: "Qual é o nome do segundo filho do Ross?",
+                respostas: ["Emily", "Emma", "Ella", "Ben"],
+                correta: 1,
+                imagem: "../assets/imgs/filhaRachel.png"
+            },
+            {
+                pergunta: "Phoebe tem medo de ir ao dentista por qual motivo?",
+                respostas: ["Tem medo do dentista", "Acha que o dentista é seu pai que nunca conheceu", "Acha que alguém morre toda vez que ela vai ao dentista", "Acha que seus amigos vão embora quando ela vai ao dentista"],
+                correta: 2,
+                imagem: "../assets/imgs/phoebeDentista.png"
+            },
+            {
+                pergunta: "Em qual programa Monica e Ross fazem 'the routine'?",
+                respostas: ["Robert Clark's Rockin New Year's Eve", "Dick Clark's New Year's Rockin' Eve", "New Year's Rockin' Eve with Dick Clark", "Rockin' Around the New Year's Eve"],
+                correta: 1,
+                imagem: "../assets/imgs/theRoutine.png"
+            },
+            {
+                pergunta: "Ross traiu Rachel durante o 'break'?",
+                respostas: ["Sim, ficou com a Chloe", "Não, eles estavam separados", "Sim, ficou com a Emily", "Não, foi tudo mentira"],
+                correta: 0,
+                imagem: "../assets/imgs/weWereOnABreak.png"
+            },
         ];
 
         var perguntaAtual = 0;
@@ -131,7 +188,13 @@
             var divBotoes = document.getElementById("answer-buttons");
             divBotoes.innerHTML = "";
 
-            document.getElementById("question").innerText = perguntas[perguntaAtual].pergunta;
+            if (perguntas[perguntaAtual].imagem == "") {
+                document.getElementById("question").innerHTML = perguntas[perguntaAtual].pergunta
+            } else {
+                document.getElementById("question").innerHTML = perguntas[perguntaAtual].pergunta +
+                    "<br><img src='" + perguntas[perguntaAtual].imagem + "' style='width: 200px; border-radius: 10px;'>";
+            }
+
 
             var i = 0;
             while (i < perguntas[perguntaAtual].respostas.length) {
@@ -199,7 +262,7 @@
             // pega o id do usuário que está na sessão
             var idUsuario = sessionStorage.ID_USUARIO;
             console.log("idUsuario:", idUsuario);
-            console.log("pontuacao:", pontuacao);  
+            console.log("pontuacao:", pontuacao);
             fetch("/quiz/salvar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

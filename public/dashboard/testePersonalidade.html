@@ -294,22 +294,23 @@
         }
 
         function selecionarResposta() {
-            if (jaRespondeu) return;
-            jaRespondeu = true;
-
             var personagemEscolhido = this.getAttribute("data-personagem");
 
-            if (personagemEscolhido == "intro") {
-                identificacao = this.innerText; // salva o personagem da intro
-            } else {
-                votos[personagemEscolhido]++;
-            }
-
-            this.classList.add("correct");
-
+            // Remove o destaque de todos os botões
             var botoes = document.getElementById("answer-buttons").children;
             for (var i = 0; i < botoes.length; i++) {
-                botoes[i].disabled = true;
+                botoes[i].classList.remove("correct");
+            }
+
+            // Marca só o clicado
+            this.classList.add("correct");
+
+            // Registra a resposta
+            if (personagemEscolhido == "intro") {
+                identificacao = this.innerText;
+            } else {
+                votos[personagemEscolhido] = 0; // zera antes de somar
+                votos[personagemEscolhido]++;
             }
 
             document.getElementById("btnProxima").style.display = "block";

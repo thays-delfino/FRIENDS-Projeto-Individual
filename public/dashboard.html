@@ -65,7 +65,7 @@
           <p class="kpi-valor" id="kpi-usuarios">-</p>
         </div>
         <div class="kpi-card">
-          <p class="kpi-titulo">Quantidade de Quizzes Jogados</p>
+          <p class="kpi-titulo">Média de Acertos</p>
           <p class="kpi-valor" id="kpi-quizzes">-</p>
         </div>
         <div class="kpi-card">
@@ -120,7 +120,7 @@
     .then(function (resposta) {
       resposta.json().then(function (dados) {
         document.getElementById("kpi-usuarios").innerText = dados.totalUsuarios;
-        document.getElementById("kpi-quizzes").innerText = dados.totalQuizzes;
+        document.getElementById("kpi-quizzes").innerText = dados.media;
         document.getElementById("kpi-testes").innerText = dados.totalTestes;
         document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
       });
@@ -135,7 +135,7 @@
         var valores = [];
 
         for (var i = 0; i < dados.length; i++) {
-          labels.push(dados[i].personagem);
+          labels.push(dados[i].identificacao);
           valores.push(dados[i].total);
         }
 

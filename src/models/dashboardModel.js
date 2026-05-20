@@ -4,7 +4,7 @@ function getKpis() {
     var instrucaoSql = `
         SELECT
             (SELECT COUNT(*) FROM usuario) AS totalUsuarios,
-            (SELECT COUNT(*) FROM resultado_quiz) AS totalQuizzes,
+            (SELECT ROUND(AVG(pontuacao),2) FROM resultado_quiz) AS media,
             (SELECT COUNT(*) FROM resultado_personalidade) AS totalTestes,
             (SELECT personagem FROM resultado_personalidade 
              GROUP BY personagem ORDER BY COUNT(*) DESC LIMIT 1) AS personagemPopular;
@@ -14,9 +14,9 @@ function getKpis() {
 
 function getGraficoPizza() {
     var instrucaoSql = `
-        SELECT personagem, COUNT(*) AS total 
+        SELECT identificacao, COUNT(*) AS total 
         FROM resultado_personalidade 
-        GROUP BY personagem;
+        GROUP BY identificacao;
     `;
     return database.executar(instrucaoSql);
 }

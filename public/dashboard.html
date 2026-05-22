@@ -61,10 +61,6 @@
       <!-- KPIs -->
       <div class="kpis">
         <div class="kpi-card">
-          <p class="kpi-titulo">Total de Usuários </p>
-          <p class="kpi-valor" id="kpi-usuarios">-</p>
-        </div>
-        <div class="kpi-card">
           <p class="kpi-titulo">Média de Acertos de todos os usuários</p>
           <p class="kpi-valor" id="kpi-quizzes">-</p>
         </div>
@@ -131,7 +127,6 @@
     fetch("/dashboard/kpis")
       .then(function (resposta) {
         resposta.json().then(function (dados) {
-          document.getElementById("kpi-usuarios").innerText = dados.totalUsuarios;
           document.getElementById("kpi-quizzes").innerText = dados.media;
           document.getElementById("kpi-testes").innerText = dados.totalTestes;
           document.getElementById("kpi-personagem").innerText = dados.personagemPopular;

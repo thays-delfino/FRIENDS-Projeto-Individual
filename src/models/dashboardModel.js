@@ -3,7 +3,6 @@ var database = require("../database/config");
 function getKpis() {
     var instrucaoSql = `
         SELECT
-            (SELECT COUNT(*) FROM usuario) AS totalUsuarios,
             (SELECT ROUND(AVG(pontuacao),2) FROM resultado_quiz) AS media,
             (SELECT COUNT(*) FROM resultado_personalidade) AS totalTestes,
             (SELECT personagem FROM resultado_personalidade 

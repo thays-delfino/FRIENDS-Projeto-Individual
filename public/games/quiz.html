@@ -70,8 +70,7 @@
                 </div>
                 <h2 class=mensagemInicialQuiz id="mensagem">Olá friend! <br>Será que você é fã de verdade? Vamos
                     descobrir!</h2>
-                <img id="gifInicio" src="../assets/gifTeste.gif"
-                    alt="friends gif">
+                <img id="gifInicio" src="../assets/gifTeste.gif" alt="friends gif">
                 <button onclick="iniciarQuiz()" id="btnIniciar">Iniciar Quiz</button>
                 <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
             </div>
@@ -256,8 +255,23 @@
         function mostrarResultado() {
             document.getElementById("answer-buttons").innerHTML = "";
             document.getElementById("btnProxima").style.display = "none";
-            document.getElementById("question").innerText =
-                "Você acertou " + pontuacao + " de " + perguntas.length + "!";
+
+
+            if (pontuacao <= 3) {
+                gif = "../assets/joeyTriste.gif";
+                mensagem = "Parece que você não é bem um fã... Tente de novo!";
+            } else if (pontuacao <= 7) {
+                gif = "../assets/joeyOk.gif";
+                mensagem = "Nada mal, mas dá para melhorar!";
+            } else {
+                gif = "../assets/rachelPhoebeFeliz.gif";
+                mensagem = "Uau! Você é um verdadeiro friend!";
+            }
+
+            document.getElementById("question").innerHTML =
+                "Você acertou " + pontuacao + " de " + perguntas.length + "!" +
+                "<br><img src='" + gif + "' style='width: 200px; border-radius: 10px;'>" +
+                "<br><p>" + mensagem + "</p>";
 
             // pega o id do usuário que está na sessão
             var idUsuario = sessionStorage.ID_USUARIO;

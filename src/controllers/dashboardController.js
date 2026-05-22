@@ -18,4 +18,10 @@ function getPersonagens(req, res) {
         .catch(function (erro) { res.status(500).json(erro.sqlMessage); });
 }
 
-module.exports = { getKpis, getGraficoPizza, getPersonagens };
+function getRanking(req, res){
+    dashboardModel.getRanking()
+        .then(function(resultado){ res.json(resultado); })
+        .catch(function(erro){ res.status(500).json(erro.sqlMessage); })
+}
+
+module.exports = { getKpis, getGraficoPizza, getPersonagens, getRanking };

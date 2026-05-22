@@ -65,7 +65,7 @@
           <p class="kpi-valor" id="kpi-usuarios">-</p>
         </div>
         <div class="kpi-card">
-          <p class="kpi-titulo">Média de Acertos</p>
+          <p class="kpi-titulo">Média de Acertos de todos os usuários</p>
           <p class="kpi-valor" id="kpi-quizzes">-</p>
         </div>
         <div class="kpi-card">
@@ -87,6 +87,11 @@
         <div class="grafico-card">
           <h3>Personagens que os usuários mais tiraram no teste</h3>
           <canvas id="graficoLinha"></canvas>
+        </div>
+
+        <div class="grafico-card">
+          <h3>Top 5 Melhores pontuações no quiz</h3>
+          <canvas id="tabelaRanking"></canvas>
         </div>
       </div>
 
@@ -148,54 +153,68 @@
               backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
             }]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true
-          }
         });
 
       });
     });
 
-    fetch("/dashboard/personagens")
-  .then(function (resposta) {
-    resposta.json().then(function (dados) {
+  fetch("/dashboard/personagens")
+    .then(function (resposta) {
+      resposta.json().then(function (dados) {
 
-      var labels  = [];
-      var valores = [];
+        var labels = [];
+        var valores = [];
 
-      for (var i = 0; i < dados.length; i++) {
-        labels.push(dados[i].personagem);
-        valores.push(dados[i].total);
-      }
-
-      new Chart(document.getElementById("graficoLinha"), {
-        type: "bar",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "Pessoas por personagem",
-            data: valores,
-            backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1 }
-            }
-          }
+        for (var i = 0; i < dados.length; i++) {
+          labels.push(dados[i].personagem);
+          valores.push(dados[i].total);
         }
-      });
 
+        new Chart(document.getElementById("graficoLinha"), {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Quantidade de pessoas por personagem",
+              data: valores,
+              backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
+            }]
+          },
+        });
+
+      });
     });
-  });
+
+  fetch("/dashboard/ranking")
+    .then(function (resposta) {
+      resposta.json().then(function (dados) {
+
+        var labels = [];
+        var valores = [];
+
+        for (var i = 0; i < dados.length; i++) {
+          labels.push(dados[i].nome);
+          valores.push(dados[i].pontuacao);
+        }
+
+        new Chart(document.getElementById("tabelaRanking"), {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Acertos",
+              data: valores,
+              backgroundColor: ["#e6005a"]
+            }]
+          },
+          options: {
+            indexAxis: 'y'
+            
+          }
+        });
+
+      });
+    });
 
 </script>
 

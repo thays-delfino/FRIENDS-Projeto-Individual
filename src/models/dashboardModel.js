@@ -31,4 +31,15 @@ function getPersonagens() {
     return database.executar(instrucaoSql);
 }
 
-module.exports = { getKpis, getGraficoPizza, getPersonagens };
+function getRanking() {
+    var instrucaoSql = `
+        SELECT u.nome, r.pontuacao, r.total
+        FROM resultado_quiz r
+        JOIN usuario u ON u.id = r.id_usuario
+        ORDER BY r.pontuacao DESC
+        LIMIT 5;
+    `;
+    return database.executar(instrucaoSql);
+}
+
+module.exports = { getKpis, getGraficoPizza, getPersonagens, getRanking };

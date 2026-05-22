@@ -8,7 +8,7 @@ function salvar(idUsuario, personagem, identificacao) {
         if (resultado.length > 0) {
             var sqlUpdate = `
                 UPDATE resultado_personalidade 
-                SET pesonagem = '${personagem}', identificacao = '${identificacao}'
+                SET personagem = '${personagem}', identificacao = '${identificacao}'
                 WHERE id_usuario = '${idUsuario}';
             `;
 

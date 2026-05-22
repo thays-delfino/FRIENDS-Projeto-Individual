@@ -71,8 +71,7 @@
                     <div id="answer-buttons"></div>
                 </div>
                 <h2 class=mensagemInicialQuiz id="mensagem"><br>Qual personagem de Friends você é? Descubra agora!</h2>
-                <img id="gifInicio" src="../assets/gifQuiz.gif"
-                    alt="friends gif">
+                <img id="gifInicio" src="../assets/gifQuiz.gif" alt="friends gif">
                 <button onclick="iniciarTeste()" id="btnIniciar">Iniciar Quiz</button>
                 <button onclick="proximaPergunta()" id="btnProxima">Próxima</button>
 
@@ -309,7 +308,6 @@
             if (personagemEscolhido == "intro") {
                 identificacao = this.innerText;
             } else {
-                votos[personagemEscolhido] = 0; // zera antes de somar
                 votos[personagemEscolhido]++;
             }
 
@@ -341,14 +339,21 @@
 
             var contagem = [votos.Monica, votos.Chandler, votos.Ross, votos.Rachel, votos.Joey, votos.Phoebe];
 
-            var indiceMaior = 0;
-
-            for (var i = 1; i < contagem.length; i++) {
-                if (contagem[i] > contagem[indiceMaior]) {
-                    indiceMaior = i;
+            var maiorVoto = 0;
+            for (var i = 0; i < contagem.length; i++) {
+                if (contagem[i] > maiorVoto) {
+                    maiorVoto = contagem[i];
                 }
             }
 
+            var empatados = [];
+            for (var i = 0; i < contagem.length; i++) {
+                if (contagem[i] == maiorVoto) {
+                    empatados.push(i);
+                }
+            }
+
+            var indiceMaior = empatados[Math.floor(Math.random() * empatados.length)];
             var vencedor = personagens[indiceMaior];
 
             document.getElementById("question").innerHTML =

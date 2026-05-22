@@ -120,101 +120,120 @@
 
 <script>
 
+  window.onload = function () {
+    carregarKpis();
+    carregarGraficoPizza();
+    carregarGraficoPersonagens();
+    carregarRanking();
+  }
   // busca os KPIs e preenche os cards
-  fetch("/dashboard/kpis")
-    .then(function (resposta) {
-      resposta.json().then(function (dados) {
-        document.getElementById("kpi-usuarios").innerText = dados.totalUsuarios;
-        document.getElementById("kpi-quizzes").innerText = dados.media;
-        document.getElementById("kpi-testes").innerText = dados.totalTestes;
-        document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
+  function carregarKpis() {
+    fetch("/dashboard/kpis")
+      .then(function (resposta) {
+        resposta.json().then(function (dados) {
+          document.getElementById("kpi-usuarios").innerText = dados.totalUsuarios;
+          document.getElementById("kpi-quizzes").innerText = dados.media;
+          document.getElementById("kpi-testes").innerText = dados.totalTestes;
+          document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
+        });
       });
-    });
+  }
+
 
   // busca os dados e monta o gráfico de pizza
-  fetch("/dashboard/pizza")
-    .then(function (resposta) {
-      resposta.json().then(function (dados) {
+  function carregarGraficoPizza() {
+    fetch("/dashboard/pizza")
+      .then(function (resposta) {
+        resposta.json().then(function (dados) {
 
-        var labels = [];
-        var valores = [];
+          var labels = [];
+          var valores = [];
 
-        for (var i = 0; i < dados.length; i++) {
-          labels.push(dados[i].identificacao);
-          valores.push(dados[i].total);
-        }
-
-        new Chart(document.getElementById("graficoPizza"), {
-          type: "pie",
-          data: {
-            labels: labels,
-            datasets: [{
-              data: valores,
-              backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
-            }]
-          },
-        });
-
-      });
-    });
-
-  fetch("/dashboard/personagens")
-    .then(function (resposta) {
-      resposta.json().then(function (dados) {
-
-        var labels = [];
-        var valores = [];
-
-        for (var i = 0; i < dados.length; i++) {
-          labels.push(dados[i].personagem);
-          valores.push(dados[i].total);
-        }
-
-        new Chart(document.getElementById("graficoLinha"), {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [{
-              label: "Quantidade de pessoas por personagem",
-              data: valores,
-              backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
-            }]
-          },
-        });
-
-      });
-    });
-
-  fetch("/dashboard/ranking")
-    .then(function (resposta) {
-      resposta.json().then(function (dados) {
-
-        var labels = [];
-        var valores = [];
-
-        for (var i = 0; i < dados.length; i++) {
-          labels.push(dados[i].nome);
-          valores.push(dados[i].pontuacao);
-        }
-
-        new Chart(document.getElementById("tabelaRanking"), {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [{
-              label: "Acertos",
-              data: valores,
-              backgroundColor: ["#e6005a"]
-            }]
-          },
-          options: {
-            indexAxis: 'y'
-            
+          for (var i = 0; i < dados.length; i++) {
+            labels.push(dados[i].identificacao);
+            valores.push(dados[i].total);
           }
-        });
 
+          new Chart(document.getElementById("graficoPizza"), {
+            type: "pie",
+            data: {
+              labels: labels,
+              datasets: [{
+                data: valores,
+                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
+              }]
+            },
+          });
+
+        });
       });
-    });
+  }
+
+  function carregarGraficoPersonagens() {
+    fetch("/dashboard/personagens")
+      .then(function (resposta) {
+        resposta.json().then(function (dados) {
+
+          var labels = [];
+          var valores = [];
+
+          for (var i = 0; i < dados.length; i++) {
+            labels.push(dados[i].personagem);
+            valores.push(dados[i].total);
+          }
+
+          new Chart(document.getElementById("graficoLinha"), {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [{
+                label: "Quantidade de pessoas por personagem",
+                data: valores,
+                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"],
+                barThickness: 100 //ajusta a largura da barra
+              }]
+            },
+          });
+
+        });
+      });
+  }
+
+  function carregarRanking() {
+    fetch("/dashboard/ranking")
+      .then(function (resposta) {
+        resposta.json().then(function (dados) {
+
+          var labels = [];
+          var valores = [];
+
+          for (var i = 0; i < dados.length; i++) {
+            labels.push(dados[i].nome);
+            valores.push(dados[i].pontuacao);
+          }
+
+          new Chart(document.getElementById("tabelaRanking"), {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [{
+                label: "Acertos",
+                data: valores,
+                backgroundColor: ["#e6005a"],
+                barThickness: 30 //ajusta a largura da barra
+              }]
+            },
+            options: {
+              indexAxis: 'y'
+
+            }
+          });
+
+        });
+      });
+  }
+
+
 
 </script>
 

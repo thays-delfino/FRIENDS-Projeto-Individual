@@ -109,14 +109,14 @@
 <script>
 
   function cadastrar() {
-
     var nomeVar = nome_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
-    // Verificando se há algum campo em branco
-    if (
+    cardErro.style.display = "none";
+
+     if (
       nomeVar == "" ||
       emailVar == "" ||
       senhaVar == "" ||
@@ -132,39 +132,63 @@
       setInterval(sumirMensagem, 5000);
     }
 
-    // Enviando o valor da nova input
+    if (nomeVar.length < 3) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "Nome deve ter no mínimo 3 caracteres.";
+      return false;
+    }
+
+    if (emailVar.indexOf("@") == -1 || emailVar.indexOf(".") == -1) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "Digite um e-mail válido.";
+      return false;
+    }
+
+    if (senhaVar.length < 8) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "A senha precisa ter no mínimo 8 caracteres.";
+      return false;
+    }
+
+    var especiais = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    var temEspecial = false;
+    for (var i = 0; i < especiais.length; i++) {
+      if (senhaVar.indexOf(especiais[i]) != -1) {
+        temEspecial = true;
+        break;
+      }
+    }
+    if (!temEspecial) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "A senha precisa conter um caractere especial.";
+      return false;
+    }
+
     fetch("/usuarios/cadastrar", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         nomeServer: nomeVar,
         emailServer: emailVar,
-        senhaServer: senhaVar,
-      }),
+        senhaServer: senhaVar
+      })
     })
       .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
         if (resposta.ok) {
           cardErro.style.display = "block";
-
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
-          setTimeout(() => {
+          mensagem_erro.innerHTML = "Cadastro realizado com sucesso! Redirecionando...";
+          setTimeout(function () {
             window.location = "login.html";
-          }, "2000");
-
-          limparFormulario();
-          finalizarAguardar();
+          }, 2000);
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          resposta.text().then(function (texto) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = texto;
+          });
         }
       })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+      .catch(function (erro) {
+        console.log("#ERRO: " + erro);
         finalizarAguardar();
       });
 

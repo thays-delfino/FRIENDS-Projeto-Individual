@@ -1,5 +1,13 @@
 /* ===== DASHBOARD PÚBLICA ===== */
 
+.titulo-secao-dash {
+  text-align: center;
+  color: #e6005a;
+  margin-bottom: 30px;
+  font-family: 'Friends', sans-serif;
+  font-size: 50px;
+}
+
 .dash-publica .container {
   position: relative;
   z-index: 2;
@@ -62,7 +70,7 @@
 }
 
 .kpi-valor {
-  color: #e2602e;
+  color: #6553C9;
   font-size: 2rem;
   font-weight: 800;
   margin: 0;

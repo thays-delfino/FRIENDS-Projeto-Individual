@@ -155,145 +155,133 @@
             },
         ];
 
-        var perguntaAtual = 0;
-        var pontuacao = 0;
-        var jaRespondeu = false;
-        var telaInicio = true;
+        var perguntaAtual = 0;  // controla qual pergunta está sendo exibida, começa na primeira (índice 0)
+        var pontuacao = 0;      // armazena a quantidade de acertos do usuário, começa em zero
+        var telaInicio = true;  // controla se ainda está na tela inicial
 
-        function iniciarQuiz() {
-            perguntaAtual = 0;
-            pontuacao = 0;
-            jaRespondeu = false;
-            document.getElementById("btnIniciar").style.display = "none";
-            document.getElementById("mensagem").style.display = "none";
-            document.getElementById("btnProxima").style.display = "none";
-            document.getElementById("gifInicio").style.display = "none";
-            mostrarPergunta();
+        function iniciarQuiz() { // função chamada quando o usuário clica em "Iniciar Quiz"
+            perguntaAtual = 0;   // reseta para a primeira pergunta
+            pontuacao = 0;       // reseta a pontuação para zero
+            jaRespondeu = false; // reseta o controle de resposta
+
+            document.getElementById("btnIniciar").style.display = "none";  // esconde o botão de iniciar
+            document.getElementById("mensagem").style.display = "none";    // esconde a mensagem inicial
+            document.getElementById("btnProxima").style.display = "none";  // esconde o botão de próxima
+            document.getElementById("gifInicio").style.display = "none";   // esconde o gif inicial
+
+            mostrarPergunta(); // chama a função que exibe a primeira pergunta
         }
 
-        function avancar() {
-            if (telaInicio) {
-                telaInicio = false;
-                document.getElementById("btnIniciar").style.display = "none";
-                mostrarPergunta();
-            } else {
-                proximaPergunta();
-            }
-        }
+        function mostrarPergunta() { // função que exibe a pergunta atual na tela
+            jaRespondeu = false; // reseta o controle de resposta para a nova pergunta
 
-        function mostrarPergunta() {
-            jaRespondeu = false;
+            var divBotoes = document.getElementById("answer-buttons"); // pega a div que contém os botões de resposta
+            divBotoes.innerHTML = ""; // limpa os botões da pergunta anterior
 
-            var divBotoes = document.getElementById("answer-buttons");
-            divBotoes.innerHTML = "";
-
-            if (perguntas[perguntaAtual].imagem == "") {
-                document.getElementById("question").innerHTML = perguntas[perguntaAtual].pergunta
+            if (perguntas[perguntaAtual].imagem == "") { // verifica se a pergunta não tem imagem
+                document.getElementById("question").innerHTML = perguntas[perguntaAtual].pergunta; // exibe apenas o texto da pergunta
             } else {
                 document.getElementById("question").innerHTML = perguntas[perguntaAtual].pergunta +
                     "<br><img src='" + perguntas[perguntaAtual].imagem + "' style='width: 200px; border-radius: 10px;'>";
+                // exibe o texto da pergunta junto com a imagem
             }
-
 
             var i = 0;
-            while (i < perguntas[perguntaAtual].respostas.length) {
-                var btn = document.createElement("button");
-                btn.innerText = perguntas[perguntaAtual].respostas[i];
-                btn.className = "btn-quiz";
-                btn.setAttribute("data-indice", i);
-                btn.onclick = verificarResposta;
-                divBotoes.appendChild(btn);
-                i++;
+
+            while (i < perguntas[perguntaAtual].respostas.length) { // percorre todas as respostas da pergunta atual
+
+                var btn = document.createElement("button"); // cria um novo botão para cada resposta
+
+                btn.innerText = perguntas[perguntaAtual].respostas[i]; // define o texto do botão com a resposta
+
+                btn.className = "btn-quiz"; // aplica a classe CSS do botão de quiz
+
+                btn.setAttribute("data-indice", i); // salva o índice da resposta no botão para identificar qual foi clicado
+
+                btn.onclick = verificarResposta; // define a função que será chamada quando o botão for clicado
+
+                divBotoes.appendChild(btn); // adiciona o botão na div de respostas
+
+                i++; // avança para a próxima resposta
             }
 
-            document.getElementById("btnProxima").style.display = "none";
+            document.getElementById("btnProxima").style.display = "none"; // esconde o botão próxima até o usuário responder
         }
 
         function verificarResposta() {
-            if (jaRespondeu) return;
-            jaRespondeu = true;
+            var indiceClicado = parseInt(this.getAttribute("data-indice")); // pega o índice do botão clicado
+            var indiceCerto = perguntas[perguntaAtual].correta; // pega o índice da resposta correta da pergunta atual
 
-            var indiceClicado = parseInt(this.getAttribute("data-indice"));
-            var indiceCerto = perguntas[perguntaAtual].correta;
-
-            if (indiceClicado == indiceCerto) {
-                pontuacao++;
-                this.classList.add("correct");
-            } else {
-                this.classList.add("incorrect");
-
-                var botoes = document.getElementById("answer-buttons").children;
-                var i = 0;
-                while (i < botoes.length) {
-                    if (parseInt(botoes[i].getAttribute("data-indice")) == indiceCerto) {
-                        botoes[i].classList.add("correct");
-                    }
-                    i++;
-                }
+            if (indiceClicado == indiceCerto) { // verifica se o botão clicado é o correto
+                pontuacao++; // soma 1 ponto na pontuação se acertou
             }
 
-            var botoes = document.getElementById("answer-buttons").children;
+            this.classList.add("selecionado"); // deixa o botão clicado com a cor escura independente de acertar ou errar
+
+            var botoes = document.getElementById("answer-buttons").children; // pega todos os botões de resposta
+
+            // após o usuário clicar em qualquer botão, todos ficam bloqueados e ele não consegue mais clicar em nenhum.
             var i = 0;
-            while (i < botoes.length) {
-                botoes[i].disabled = true;
-                i++;
+            while (i < botoes.length) { // percorre todos os botões
+                botoes[i].disabled = true; // desabilita o botão para não deixar clicar novamente
+                i++; // avança para o próximo botão
             }
 
-            document.getElementById("btnProxima").style.display = "block";
+            document.getElementById("btnProxima").style.display = "block"; // exibe o botão próxima após responder
         }
 
-        function proximaPergunta() {
-            perguntaAtual++;
+        function proximaPergunta() { // função chamada quando o usuário clica em "Próxima"
+            perguntaAtual++; // avança para a próxima pergunta
 
-            if (perguntaAtual < perguntas.length) {
-                mostrarPergunta();
+            if (perguntaAtual < perguntas.length) { // se ainda há perguntas
+                mostrarPergunta(); // exibe a próxima pergunta
             } else {
-                mostrarResultado();
+                mostrarResultado(); // se acabaram as perguntas, exibe o resultado final
             }
         }
 
-        function mostrarResultado() {
-            document.getElementById("answer-buttons").innerHTML = "";
-            document.getElementById("btnProxima").style.display = "none";
+        function mostrarResultado() { // função que exibe o resultado final do quiz
 
+            document.getElementById("answer-buttons").innerHTML = ""; // limpa os botões de resposta
+            document.getElementById("btnProxima").style.display = "none"; // esconde o botão próxima
 
-            if (pontuacao <= 3) {
-                gif = "../assets/joeyTriste.gif";
-                mensagem = "Parece que você não é bem um fã... Tente de novo!";
-            } else if (pontuacao <= 7) {
-                gif = "../assets/joeyOk.gif";
-                mensagem = "Nada mal, mas dá para melhorar!";
-            } else {
-                gif = "../assets/rachelPhoebeFeliz.gif";
-                mensagem = "Uau! Você é um verdadeiro friend!";
+            if (pontuacao <= 3) { // se acertou 3 ou menos
+                gif = "../assets/joeyTriste.gif"; // exibe gif do Joey triste
+                mensagem = "Parece que você não é bem um fã... Tente de novo!"; // mensagem de desempenho ruim
+            } else if (pontuacao <= 8) { // se acertou entre 4 e 8
+                gif = "../assets/joeyOk.gif"; // exibe gif do Joey ok
+                mensagem = "Nada mal, mas dá para melhorar!"; // mensagem de desempenho médio
+            } else { // se acertou 9 ou mais
+                gif = "../assets/rachelPhoebeFeliz.gif"; // exibe gif da Rachel e Phoebe felizes
+                mensagem = "Uau! Você é um verdadeiro friend!"; // mensagem de desempenho ótimo
             }
 
             document.getElementById("question").innerHTML =
-                "Você acertou " + pontuacao + " de " + perguntas.length + "!" +
-                "<br><img src='" + gif + "' style='width: 200px; border-radius: 10px;'>" +
-                "<br><p>" + mensagem + "</p>";
+                "Você acertou " + pontuacao + " de " + perguntas.length + "!" + // exibe a pontuação final
+                "<br><img src='" + gif + "' style='width: 200px; border-radius: 10px;'>" + // exibe o gif do resultado
+                "<br><p>" + mensagem + "</p>"; // exibe a mensagem do resultado
 
-            // pega o id do usuário que está na sessão
-            var idUsuario = sessionStorage.ID_USUARIO;
-            console.log("idUsuario:", idUsuario);
-            console.log("pontuacao:", pontuacao);
-            fetch("/quiz/salvar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    idUsuario: idUsuario,
-                    pontuacao: pontuacao,
-                    total: perguntas.length
+            var idUsuario = sessionStorage.ID_USUARIO; // pega o id do usuário salvo na sessão quando fez login
+            console.log("idUsuario:", idUsuario); // exibe o id no console para debug
+            console.log("pontuacao:", pontuacao); // exibe a pontuação no console para debug
+
+            fetch("/quiz/salvar", { // faz uma requisição POST para salvar o resultado no banco
+                method: "POST", // define o método como POST pois está enviando dados
+                headers: { "Content-Type": "application/json" }, // informa que os dados são em formato JSON
+                body: JSON.stringify({ // converte os dados para JSON antes de enviar
+                    idUsuario: idUsuario, // envia o id do usuário
+                    pontuacao: pontuacao, // envia a pontuação final
+                    total: perguntas.length // envia o total de perguntas
                 })
             })
                 .then(function (res) {
-                    return res.json();
+                    return res.json(); // converte a resposta do servidor para JSON
                 })
                 .then(function (dados) {
-                    console.log("Resultado salvo!", dados);
+                    console.log("Resultado salvo!", dados); // exibe no console que o resultado foi salvo com sucesso
                 })
                 .catch(function (erro) {
-                    console.log("Erro ao salvar:", erro);
+                    console.log("Erro ao salvar:", erro); // exibe no console se houve erro ao salvar
                 });
         }
 

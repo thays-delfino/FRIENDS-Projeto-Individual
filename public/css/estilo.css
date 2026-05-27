@@ -659,13 +659,10 @@ input {
   transition: all 0.3s;
 }
 
-.correct {
+.selecionado {
   background: #206812;
 }
 
-.incorrect {
-  background: red;
-}
 
 .btn-quiz:hover:not([disabled]) {
   background: #2f4e21;

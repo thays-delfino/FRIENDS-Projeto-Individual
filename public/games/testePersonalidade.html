@@ -219,8 +219,9 @@
         ];
 
         // contadores de votos para cada personagem
-        var votos = {
-            Monica: 0,
+
+        var votos = { // objeto que conta quantos votos cada personagem recebeu
+            Monica: 0,   // começa com zero votos
             Chandler: 0,
             Ross: 0,
             Rachel: 0,
@@ -228,20 +229,20 @@
             Phoebe: 0
         };
 
-        var perguntaAtual = 0; // controla qual pergunta está sendo exibida
-        var jaRespondeu = false; // impede clicar duas vezes
+        var perguntaAtual = 0;   // controla qual pergunta está sendo exibida, começa na primeira (índice 0)
+        var jaRespondeu = false; // controla se o usuário já respondeu a pergunta atual, evita clicar duas vezes
+        var respostaAtual = ""; // guarda a última resposta selecionada
 
-        function telaInicial() {
-            document.getElementById("btnProxima").style.display = "none";
-            document.getElementById("btnIniciar").style.display = "block";
-            document.getElementById("gifInicio").style.display = "block";
+        function telaInicial() { // função chamada quando a página carrega, exibe a tela inicial
+            document.getElementById("btnIniciar").style.display = "block"; // exibe o botão iniciar
+            document.getElementById("gifInicio").style.display = "block";  // exibe o gif inicial
         }
 
-        function iniciarTeste() {
-            perguntaAtual = 0;
-            jaRespondeu = false;
+        function iniciarTeste() { // função chamada quando o usuário clica em "Iniciar Quiz"
+            perguntaAtual = 0;   // reseta para a primeira pergunta
+            jaRespondeu = false; // reseta o controle de resposta
 
-            // zera todos os votos
+            // zera todos os votos para começar o teste do zero
             votos.Monica = 0;
             votos.Chandler = 0;
             votos.Ross = 0;
@@ -249,72 +250,67 @@
             votos.Joey = 0;
             votos.Phoebe = 0;
 
-            document.getElementById("mensagem").style.display = "none";
-            document.getElementById("btnIniciar").style.display = "none";
-            document.getElementById("gifInicio").style.display = "none";
-            document.getElementById("btnProxima").style.display = "none";
+            document.getElementById("mensagem").style.display = "none";  // esconde a mensagem inicial
+            document.getElementById("btnIniciar").style.display = "none"; // esconde o botão iniciar
+            document.getElementById("gifInicio").style.display = "none";  // esconde o gif inicial
 
-            mostrarPergunta();
+            mostrarPergunta(); // chama a função que exibe a primeira pergunta
         }
 
-        function avancar() {
-            if (telaInicio) {
-                telaInicio = false;
-                document.getElementById("btnIniciar").style.display = "none";
-                mostrarPergunta();
-            } else {
-                proximaPergunta();
-            }
-        }
+        function mostrarPergunta() { // função que exibe a pergunta atual na tela
+            jaRespondeu = false; // reseta o controle de resposta para a nova pergunta
 
-        function mostrarPergunta() {
-            jaRespondeu = false;
+            var divBotoes = document.getElementById("answer-buttons"); // pega a div que contém os botões de resposta
+            divBotoes.innerHTML = ""; // limpa os botões da pergunta anterior
 
-            var divBotoes = document.getElementById("answer-buttons");
-            divBotoes.innerHTML = "";
+            document.getElementById("question").innerText = perguntas[perguntaAtual].pergunta; // exibe o texto da pergunta atual
 
-            document.getElementById("question").innerText = perguntas[perguntaAtual].pergunta;
+            for (var i = 0; i < perguntas[perguntaAtual].respostas.length; i++) { // percorre todas as respostas da pergunta atual
 
-            for (var i = 0; i < perguntas[perguntaAtual].respostas.length; i++) {
+                var btn = document.createElement("button"); // cria um novo botão para cada resposta
 
-                var btn = document.createElement("button");
+                btn.innerText = perguntas[perguntaAtual].respostas[i].texto; // define o texto do botão com a resposta
 
-                btn.innerText = perguntas[perguntaAtual].respostas[i].texto;
+                btn.className = "btn-quiz"; // aplica a classe CSS do botão de quiz
 
-                btn.className = "btn-quiz";
+                btn.setAttribute("data-personagem", perguntas[perguntaAtual].respostas[i].personagem); // salva o personagem no botão para identificar qual foi clicado
 
-                btn.setAttribute("data-personagem", perguntas[perguntaAtual].respostas[i].personagem); // salva o personagem no botão
+                btn.onclick = selecionarResposta; // define a função que será chamada quando o botão for clicado
 
-                btn.onclick = selecionarResposta;
-                divBotoes.appendChild(btn);
+                divBotoes.appendChild(btn); // adiciona o botão na div de respostas
             }
 
-            document.getElementById("btnProxima").style.display = "none";
+            document.getElementById("btnProxima").style.display = "none"; // esconde o botão próxima até o usuário responder
         }
 
         function selecionarResposta() {
-            var personagemEscolhido = this.getAttribute("data-personagem");
+            var personagemEscolhido = this.getAttribute("data-personagem"); // pega o personagem do botão clicado
 
-            // Remove o destaque de todos os botões
+            // remove o destaque de todos os botões
             var botoes = document.getElementById("answer-buttons").children;
+
             for (var i = 0; i < botoes.length; i++) {
-                botoes[i].classList.remove("correct");
+                botoes[i].classList.remove("selecionado");
             }
 
-            // Marca só o clicado
-            this.classList.add("correct");
+            this.classList.add("selecionado"); // destaca apenas o botão clicado
 
-            // Registra a resposta
-            if (personagemEscolhido == "intro") {
-                identificacao = this.innerText;
+            if (personagemEscolhido == "intro") { // se é a pergunta introdutória
+                identificacao = this.innerText; // salva o personagem de identificação
             } else {
-                votos[personagemEscolhido]++;
+                respostaAtual = personagemEscolhido; // salva a última resposta selecionada
             }
 
             document.getElementById("btnProxima").style.display = "block";
         }
 
         function proximaPergunta() {
+
+            if (respostaAtual != "") { // se há uma resposta selecionada
+                votos[respostaAtual]++; // conta o voto só quando clicar em próxima
+                respostaAtual = ""; // reseta a resposta atual
+            }
+
             perguntaAtual++;
 
             if (perguntaAtual < perguntas.length) {
@@ -324,11 +320,12 @@
             }
         }
 
-        function mostrarResultado() {
-            document.getElementById("answer-buttons").innerHTML = "";
-            document.getElementById("btnProxima").style.display = "none";
+        function mostrarResultado() { // função que exibe o resultado final do teste
 
-            var personagens = [
+            document.getElementById("answer-buttons").innerHTML = ""; // limpa os botões de resposta
+            document.getElementById("btnProxima").style.display = "none"; // esconde o botão próxima
+
+            var personagens = [ // array com os dados de cada personagem para exibir no resultado
                 { nome: "Monica", imagem: "../assets/gifMonica.gif", descricao: "Você é perfeccionista, competitiva e ama cuidar de todos!" },
                 { nome: "Chandler", imagem: "../assets/gifChandler.gif", descricao: "Você usa o humor para tudo, mas tem um coração enorme!" },
                 { nome: "Ross", imagem: "../assets/gifRoss.gif", descricao: "Você é inteligente, apaixonado e um pouco dramático!" },
@@ -338,38 +335,43 @@
             ];
 
             var contagem = [votos.Monica, votos.Chandler, votos.Ross, votos.Rachel, votos.Joey, votos.Phoebe];
+            // cria um array com a contagem de votos de cada personagem na mesma ordem do array personagens
 
-            var maiorVoto = 0;
-            for (var i = 0; i < contagem.length; i++) {
-                if (contagem[i] > maiorVoto) {
-                    maiorVoto = contagem[i];
+            var maiorVoto = 0; // variável para guardar o maior número de votos
+
+            for (var i = 0; i < contagem.length; i++) { // percorre a contagem de votos
+                if (contagem[i] > maiorVoto) { // verifica se o voto atual é maior que o maior encontrado
+                    maiorVoto = contagem[i]; // atualiza o maior voto
                 }
             }
 
-            var empatados = [];
-            for (var i = 0; i < contagem.length; i++) {
-                if (contagem[i] == maiorVoto) {
-                    empatados.push(i);
+            var empatados = []; // array para guardar os índices dos personagens empatados
+
+            for (var i = 0; i < contagem.length; i++) { // percorre a contagem de votos novamente
+                if (contagem[i] == maiorVoto) { // verifica se o personagem tem o maior número de votos
+                    empatados.push(i); // adiciona o índice do personagem empatado no array
                 }
             }
 
             var indiceMaior = empatados[Math.floor(Math.random() * empatados.length)];
-            var vencedor = personagens[indiceMaior];
+            // se houver empate, sorteia aleatoriamente um dos personagens empatados
+
+            var vencedor = personagens[indiceMaior]; // pega os dados do personagem vencedor da posição do indice maior
 
             document.getElementById("question").innerHTML =
-                "Você é " + vencedor.nome + "!" +
-                "<br><br><img src='" + vencedor.imagem + "' style='width: 800px; border-radius: 10px;'>" +
-                "<br><p style='font-size: 25px;''>" + vencedor.descricao + "</p>";
+                "Você é " + vencedor.nome + "!" + // exibe o nome do personagem vencedor
+                "<br><br><img src='" + vencedor.imagem + "' style='width: 800px; border-radius: 10px;'>" + // exibe o gif do personagem
+                "<br><p style='font-size: 25px;''>" + vencedor.descricao + "</p>"; // exibe a descrição do personagem
 
-            var idUsuario = sessionStorage.ID_USUARIO;
+            var idUsuario = sessionStorage.ID_USUARIO; // pega o id do usuário salvo na sessão quando fez login
 
-            fetch("/personalidade/salvar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    idUsuario: idUsuario,
-                    personagem: vencedor.nome,
-                    identificacao: identificacao
+            fetch("/personalidade/salvar", { // faz uma requisição POST para salvar o resultado no banco
+                method: "POST", // define o método como POST pois está enviando dados
+                headers: { "Content-Type": "application/json" }, // informa que os dados são em formato JSON
+                body: JSON.stringify({ // converte os dados para JSON antes de enviar
+                    idUsuario: idUsuario,       // envia o id do usuário
+                    personagem: vencedor.nome,  // envia o personagem vencedor
+                    identificacao: identificacao // envia o personagem com quem o usuário se identificou no início
                 })
             });
         }

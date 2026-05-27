@@ -1,15 +1,16 @@
-var express = require("express");
-var router = express.Router();
+var express = require("express"); // importa o framework Express
+var router = express.Router(); // cria um roteador do Express para definir as rotas
 
-var usuarioController = require("../controllers/usuarioController");
+var usuarioController = require("../controllers/usuarioController"); // importa o controller de usuário
 
-//Recebendo os dados do html e direcionando para a função cadastrar de usuarioController.js
-router.post("/cadastrar", function (req, res) {
-    usuarioController.cadastrar(req, res);
-})
-
-router.post("/autenticar", function (req, res) {
-    usuarioController.autenticar(req, res);
+router.post("/cadastrar", function (req, res) { // define a rota POST /usuarios/cadastrar
+    usuarioController.cadastrar(req, res); // quando acessada, chama a função cadastrar do controller
 });
+// é POST pois está recebendo os dados do formulário de cadastro para salvar no banco
 
-module.exports = router;
+router.post("/autenticar", function (req, res) { // define a rota POST /usuarios/autenticar
+    usuarioController.autenticar(req, res); // quando acessada, chama a função autenticar do controller
+});
+// é POST pois está recebendo email e senha do formulário de login para verificar no banco
+
+module.exports = router; // exporta o roteador para ser usado no app.js

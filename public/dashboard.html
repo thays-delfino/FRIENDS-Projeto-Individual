@@ -116,46 +116,48 @@
 
 <script>
 
+  //Quando a página termina de carregar, executa as quatro funções automaticamente
   window.onload = function () {
-    carregarKpis();
-    carregarGraficoPizza();
-    carregarGraficoPersonagens();
-    carregarRanking();
+    carregarKpis(); // carrega os cards de KPI
+    carregarGraficoPizza(); //carrega o gráfico de pizza
+    carregarGraficoPersonagens(); // carrega o gráfico de barras de personagem
+    carregarRanking(); // carrega o gráfico de ranking
   }
-  // busca os KPIs e preenche os cards
+
+  //Faz uma requisição para /dashboard/kpis e quando o banco responde, pega os dados e preenche os três cards
   function carregarKpis() {
-    fetch("/dashboard/kpis")
-      .then(function (resposta) {
-        resposta.json().then(function (dados) {
-          document.getElementById("kpi-quizzes").innerText = dados.media;
-          document.getElementById("kpi-testes").innerText = dados.totalTestes;
-          document.getElementById("kpi-personagem").innerText = dados.personagemPopular;
+    fetch("/dashboard/kpis") // faz uma requisição para a rota /dashboard/kpis
+      .then(function (resposta) { //quando o servidor responder, entra aqui
+        resposta.json().then(function (dados) { //converte a resposta para JSON
+          document.getElementById("kpi-quizzes").innerText = dados.media; //preenche o card de média de acertos
+          document.getElementById("kpi-testes").innerText = dados.totalTestes; // preenche o card de total de testes
+          document.getElementById("kpi-personagem").innerText = dados.personagemPopular; // preenche o card com personagem mais escolhido
         });
       });
   }
 
 
-  // busca os dados e monta o gráfico de pizza
+  //Faz uma requisição para /dashboard/pizza e quando o banco responde, pega os dados e preenche os três cards
   function carregarGraficoPizza() {
-    fetch("/dashboard/pizza")
-      .then(function (resposta) {
-        resposta.json().then(function (dados) {
+    fetch("/dashboard/pizza") // faz uma requisição para a rota /dashboard/pizza
+      .then(function (resposta) {  // quando o servidor responder, entra aqui
+        resposta.json().then(function (dados) { // converte a resposta para JSON
 
-          var labels = [];
-          var valores = [];
-
-          for (var i = 0; i < dados.length; i++) {
-            labels.push(dados[i].identificacao);
-            valores.push(dados[i].total);
+          var labels = []; // array vazia para guardar os nomes dos personagens
+          var valores = []; // array vazia para guardar as quantidades
+          
+          for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
+            labels.push(dados[i].identificacao); // adiciona o nome do personagem no array de labels
+            valores.push(dados[i].total); // adiciona a quantidade no array de valores
           }
 
-          new Chart(document.getElementById("graficoPizza"), {
-            type: "pie",
+          new Chart(document.getElementById("graficoPizza"), { // cria o gráfico no elemento com id "graficoPizza"
+            type: "pie", // define o tipo como pizza
             data: {
-              labels: labels,
+              labels: labels, // usa o array de nomes como labels do gráfico
               datasets: [{
-                data: valores,
-                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"]
+                data: valores, // usa o array de quantidade como dados do gráfico
+                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"] // cores de cada fatia
               }]
             },
           });
@@ -164,61 +166,35 @@
       });
   }
 
-  function carregarGraficoPersonagens() {
-    fetch("/dashboard/personagens")
+  function carregarGraficoPersonagens() { // faz uma requisição para a rota /dashboard/personagens
+    fetch("/dashboard/personagens") // quando o servidor responder, entra aqui
       .then(function (resposta) {
-        resposta.json().then(function (dados) {
+        resposta.json().then(function (dados) { // converte a resposta para JSON
 
-          var labels = [];
-          var valores = [];
+          var labels = []; // array vazio para guardar os nomes dos personagens
+          var valores = []; // array vazio para guardar as quantidades
 
-          for (var i = 0; i < dados.length; i++) {
-            labels.push(dados[i].personagem);
-            valores.push(dados[i].total);
+          for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
+            labels.push(dados[i].personagem); // adiciona o nome do personagem no array de labels
+            valores.push(dados[i].total); // adiciona a quantidade no array de valores
           }
 
-          new Chart(document.getElementById("graficoLinha"), {
-            type: "bar",
+          new Chart(document.getElementById("graficoLinha"), { // cria o gráfico no elemento com id "graficoLinha"
+            type: "bar", // define o tipo como barras
             data: {
-              labels: labels,
+              labels: labels, // usa o array de nomes como labels do gráfico
               datasets: [{
-                label: "Quantidade de pessoas por personagem",
-                data: valores,
-                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"],
-              }]
-            },
-          });
-
-        });
-      });
-  }
-
-  function carregarRanking() {
-    fetch("/dashboard/ranking")
-      .then(function (resposta) {
-        resposta.json().then(function (dados) {
-
-          var labels = [];
-          var valores = [];
-
-          for (var i = 0; i < dados.length; i++) {
-            labels.push(dados[i].nome);
-            valores.push(dados[i].pontuacao);
-          }
-
-          new Chart(document.getElementById("tabelaRanking"), {
-            type: "bar",
-            data: {
-              labels: labels,
-              datasets: [{
-                label: "Acertos",
-                data: valores,
-                backgroundColor: ["#e6005a"]
+                label: "Quantidade de pessoas por personagem", // título do dataset
+                data: valores, // usa o array de quantidades como dados do gráfico
+                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65", "#42a5f5"], // cores das barras
               }]
             },
             options: {
-              indexAxis: 'y'
-
+              plugins: {
+                legend: {
+                  display: false // desabilita a legenda do gráfico
+                }
+              }
             }
           });
 
@@ -226,8 +202,42 @@
       });
   }
 
+function carregarRanking() {
+    fetch("/dashboard/ranking") // faz uma requisição para a rota /dashboard/ranking
+      .then(function (resposta) { // quando o servidor responder, entra aqui
+        resposta.json().then(function (dados) { // converte a resposta para JSON
 
+          var labels = []; // array vazio para guardar os nomes dos usuários
+          var valores = []; // array vazio para guardar as pontuações
 
+          for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
+            labels.push(dados[i].nome); // adiciona o nome do usuário no array de labels
+            valores.push(dados[i].pontuacao); // adiciona a pontuação no array de valores
+          }
+
+          new Chart(document.getElementById("tabelaRanking"), { // cria o gráfico no elemento com id "tabelaRanking"
+            type: "bar", // define o tipo como barras
+            data: {
+              labels: labels, // usa o array de nomes como labels do gráfico
+              datasets: [{
+                label: "Acertos", // título do dataset
+                data: valores, // usa o array de pontuações como dados do gráfico
+                backgroundColor: ["#e6005a", "#F8BD49", "#7E71CB", "#ff7043", "#9ccc65"] // cores de cada barra
+              }]
+            },
+            options: {
+              indexAxis: 'y', // deixa o gráfico na horizontal
+              plugins: {
+                legend: {
+                  display: false // desabilita a legenda do gráfico
+                }
+              }
+            }
+          });
+
+        });
+      });
+  }
 </script>
 
 </html>

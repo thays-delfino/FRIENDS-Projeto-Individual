@@ -105,71 +105,71 @@
 
 
     function entrar() {
-        aguardar();
+        aguardar(); // exibe o loading enquanto processa o login
 
-        var emailVar = email_input.value;
-        var senhaVar = senha_input.value;
+        var emailVar = email_input.value; // pega o valor digitado no campo email
+        var senhaVar = senha_input.value; // pega o valor digitado no campo senha
 
-        if (emailVar == "" || senhaVar == "") {
-            cardErro.style.display = "block"
-            mensagem_erro.innerHTML = "(Erro! preencha todos os campos em branco)";
-            finalizarAguardar();
-            return false;
+        if (emailVar == "" || senhaVar == "") { // verifica se algum campo está vazio
+            cardErro.style.display = "block" // exibe o card de erro
+            mensagem_erro.innerHTML = "(Erro! preencha todos os campos em branco)"; // exibe a mensagem de erro
+            finalizarAguardar(); // para o loading
+            return false; // interrompe a função, não continua
         }
         else {
-            setInterval(sumirMensagem, 5000)
+            setInterval(sumirMensagem, 5000) // após 5 segundos, chama a função que esconde a mensagem
         }
 
         console.log("FORM LOGIN: ", emailVar);
         console.log("FORM SENHA: ", senhaVar);
 
-        fetch("/usuarios/autenticar", {
-            method: "POST",
+        fetch("/usuarios/autenticar", { // faz uma requisição POST para a rota /usuarios/autenticar
+            method: "POST", // define o método como POST pois está enviando dados
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json" // informa que os dados são em formato JSON
             },
-            body: JSON.stringify({
-                emailServer: emailVar,
-                senhaServer: senhaVar
+            body: JSON.stringify({  // converte os dados para JSON antes de enviar
+                emailServer: emailVar, // envia o email digitado
+                senhaServer: senhaVar // envia a senha digitada
             })
-        }).then(function (resposta) {
+        }).then(function (resposta) { // quando o servidor responder, entra aqui
             console.log("ESTOU NO THEN DO entrar()!")
 
-            if (resposta.ok) {
+            if (resposta.ok) { // se o login foi realizado com sucesso
                 console.log(resposta);
 
-                resposta.json().then(json => {
+                resposta.json().then(json => { // converte a resposta para JSON
                     console.log(json);
                     console.log(JSON.stringify(json));
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.ID_USUARIO = json.id;
+                    sessionStorage.EMAIL_USUARIO = json.email; // salva o email do usuário na sessão
+                    sessionStorage.NOME_USUARIO = json.nome; // salva o nome do usuário na sessão
+                    sessionStorage.ID_USUARIO = json.id; // salva o id do usuário na sessão
 
                     setTimeout(function () {
-                        window.location = "./games/quiz.html";
-                    }, 1000); // apenas para exibir o loading
+                        window.location = "./games/quiz.html"; // redireciona para a página do quiz após 1 segundo
+                    }, 1000);
 
                 });
 
-            } else {
+            } else {// se o servidor retornou um erro (email ou senha incorretos)
 
                 console.log("Houve um erro ao tentar realizar o login!");
 
-                resposta.text().then(texto => {
+                resposta.text().then(texto => { // converte a resposta para texto
                     console.error(texto);
-                    finalizarAguardar(texto);
+                    finalizarAguardar(texto); // para o loading e exibe a mensagem de erro
                 });
             }
 
-        }).catch(function (erro) {
-            console.log(erro);
+        }).catch(function (erro) { // se houver erro na conexão com o servidor
+            console.log(erro); // exibe o erro no console
         })
 
-        return false;
+        return false; // impede o comportamento padrão do formulário
     }
 
     function sumirMensagem() {
-        cardErro.style.display = "none"
+        cardErro.style.display = "none" // esconde o card de erro
     }
 
 </script>

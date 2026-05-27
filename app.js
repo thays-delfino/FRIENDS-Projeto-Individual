@@ -7,31 +7,34 @@ var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
 
 require("dotenv").config({ path: caminho_env });
 
-var express = require("express");
-var cors = require("cors");
-var path = require("path");
-var PORTA_APP = process.env.APP_PORT;
-var HOST_APP = process.env.APP_HOST;
+var express = require("express"); // importa o framework Express para criar o servidor
+var cors = require("cors"); // importa o CORS para permitir requisições de origens diferentes
+var path = require("path"); // importa o módulo path para trabalhar com caminhos de arquivos
 
-var app = express();
+var PORTA_APP = process.env.APP_PORT; // pega a porta do servidor definida no arquivo .env
+var HOST_APP = process.env.APP_HOST; // pega o host do servidor definido no arquivo .env
 
-var indexRouter = require("./src/routes/index");
-var usuarioRouter = require("./src/routes/usuarios");
-var resultadoQuizRoutes = require("./src/routes/resultadoQuizRoutes");
-var personalidadeRoutes = require("./src/routes/resultadoPersonalidadeRoutes");
-var dashboardRoutes = require("./src/routes/dashboardRoutes");
+var app = express(); // cria a aplicação Express
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+// importa todos os arquivos de rotas
+var indexRouter = require("./src/routes/index"); // rotas da página inicial
+var usuarioRouter = require("./src/routes/usuarios"); // rotas de cadastro e login
+var resultadoQuizRoutes = require("./src/routes/resultadoQuizRoutes"); // rotas do quiz
+var personalidadeRoutes = require("./src/routes/resultadoPersonalidadeRoutes"); // rotas do teste de personalidade
+var dashboardRoutes = require("./src/routes/dashboardRoutes"); // rotas do dashboard
 
-app.use(cors());
+app.use(express.json()); // permite que o servidor leia dados no formato JSON enviados pelo frontend
+app.use(express.urlencoded({ extended: false })); // permite que o servidor leia dados enviados por formulários HTML
+app.use(express.static(path.join(__dirname, "public"))); // define a pasta public como estática, onde ficam os arquivos HTML, CSS e JS
 
-app.use("/", indexRouter);
-app.use("/usuarios", usuarioRouter);
-app.use("/quiz", resultadoQuizRoutes);
-app.use("/personalidade", personalidadeRoutes);
-app.use("/dashboard", dashboardRoutes);
+app.use(cors()); // habilita o CORS para permitir que o frontend acesse o backend
+
+// define qual arquivo de rotas será usado para cada caminho
+app.use("/", indexRouter); // requisições para "/" vão para indexRouter
+app.use("/usuarios", usuarioRouter); // requisições para "/usuarios" vão para usuarioRouter
+app.use("/quiz", resultadoQuizRoutes); // requisições para "/quiz" vão para resultadoQuizRoutes
+app.use("/personalidade", personalidadeRoutes); // requisições para "/personalidade" vão para personalidadeRoutes
+app.use("/dashboard", dashboardRoutes); // requisições para "/dashboard" vão para dashboardRoutes
 
 app.listen(PORTA_APP, function () {
     console.log(`

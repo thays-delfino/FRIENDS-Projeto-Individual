@@ -60,11 +60,13 @@ function cadastrar(req, res) { // função que cadastra um novo usuário
         usuarioModel.verificarEmail(email)  // verifica no banco se o email já está cadastrado
             .then(function (resultado) {
                 if (resultado.length > 0) { // se retornou algum resultado, o email já existe
-                    res.status(409).send("Este e-mail já está cadastrado!"); // retorna erro 409 (conflito)
+                    res.status(409).send("Este e-mail já está cadastrado!"); // retorna erro 409 
+
                 } else { // se não encontrou nenhum resultado, o email está disponível
+
                     usuarioModel.cadastrar(nome, email, senha) // chama a função cadastrar do model passando nome, email e senha
                         .then(function (resultado) { 
-                            res.json(resultado); // quando o banco responder, envia o resultado para o frontend
+                            res.json(resultado); 
                         })
                         .catch(function (erro) {
                             console.log(erro); 

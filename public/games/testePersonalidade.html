@@ -289,6 +289,7 @@
             // remove o destaque de todos os botões
             var botoes = document.getElementById("answer-buttons").children;
 
+            //percorre todos os botões e remove a classe ccs "selecionado" deles. Senão se o usuário clicar em duas alternativas, a cor fica escura nos dois
             for (var i = 0; i < botoes.length; i++) {
                 botoes[i].classList.remove("selecionado");
             }
@@ -296,7 +297,7 @@
             this.classList.add("selecionado"); // destaca apenas o botão clicado
 
             if (personagemEscolhido == "intro") { // se é a pergunta introdutória
-                identificacao = this.innerText; // salva o personagem de identificação
+                identificacao = this.innerText; // pega o texto que esta salvo do personagem de identificação
             } else {
                 respostaAtual = personagemEscolhido; // salva a última resposta selecionada
             }

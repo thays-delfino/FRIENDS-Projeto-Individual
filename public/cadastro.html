@@ -109,22 +109,24 @@
 <script>
 
   function cadastrar() {
-    var nomeVar = nome_input.value; // pega o valor digitado no campo nome
-    var emailVar = email_input.value; //pega o valor digitado no campo email
-    var senhaVar = senha_input.value; // pega o valor digitado no campo senha
-    var confirmacaoSenhaVar = confirmacao_senha_input.value; // pega o valor digitado no campo confirmar senha
+    //pega os valores digitados nos inputs
+    var nomeVar = nome_input.value; 
+    var emailVar = email_input.value; 
+    var senhaVar = senha_input.value; 
+    var confirmacaoSenhaVar = confirmacao_senha_input.value; 
 
     cardErro.style.display = "none"; //esconde o card de erro antes de validar
 
+     // verifica se os campo nome estão vazios
      if (
-      nomeVar == "" || // verifica se o campo nome está vazio
-      emailVar == "" || // verifica se o campo email está vazio
-      senhaVar == "" || // verifica se o campo senha está vazio
-      confirmacaoSenhaVar == "" // verifica se o campo confirmação está vazio
+      nomeVar == "" ||
+      emailVar == "" || 
+      senhaVar == "" || 
+      confirmacaoSenhaVar == "" 
     ) {
-      cardErro.style.display = "block"; // se estiver vazio exibe o card de erro
+      cardErro.style.display = "block"; // se estiver vazio exibe o card e mensagem de erro
       mensagem_erro.innerHTML =
-        "(Erro! preencha todos os campos em branco)"; // exibe a mensagem de erro
+        "(Erro! preencha todos os campos em branco)";
 
       finalizarAguardar(); // para o loading
       return false; // interrompe a função, não continua
@@ -133,21 +135,21 @@
     }
 
     if (nomeVar.length < 3) { // verifica se o nome tem ao menos 3 caracteres
-      cardErro.style.display = "block"; // se tiver menoso exibe o card de erro
-      mensagem_erro.innerHTML = "Nome deve ter no mínimo 3 caracteres."; // exibe mensagem de erro
-      return false; // interrompe a função 
+      cardErro.style.display = "block"; 
+      mensagem_erro.innerHTML = "Nome deve ter no mínimo 3 caracteres."; 
+      return false; 
     }
 
     if (emailVar.indexOf("@") == -1 || emailVar.indexOf(".") == -1) { // indexOf retorna -1 quando não encontra o caractere
-      cardErro.style.display = "block"; // se estiver vazio exibe o card de erro
-      mensagem_erro.innerHTML = "Digite um e-mail válido."; // exibe mensagem de erro
-      return false; // interrompe a função 
+      cardErro.style.display = "block"; 
+      mensagem_erro.innerHTML = "Digite um e-mail válido."; 
+      return false;
     }
 
     if (senhaVar.length < 8) { // a senha precisa ter ao menos 8 caracteres
-      cardErro.style.display = "block"; // se estiver menos exibe o card de erro
-      mensagem_erro.innerHTML = "A senha precisa ter no mínimo 8 caracteres."; // exibe a mensagem de erro
-      return false; // interrompe a função
+      cardErro.style.display = "block"; 
+      mensagem_erro.innerHTML = "A senha precisa ter no mínimo 8 caracteres."; 
+      return false; 
     }
 
     var especiais = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"; // variável com todos os caracteres especiais
@@ -156,7 +158,7 @@
     for (var i = 0; i < especiais.length; i++) { // percorre cada caractere especial
       if (senhaVar.indexOf(especiais[i]) != -1) { // verifica se a senha contém o caractere especial atual
         temEspecial = true; // se encontrou, muda para true
-        break; // para o loop
+        break; 
       }
     }
     if (!temEspecial) { // se não houver especial
@@ -167,22 +169,23 @@
 
     fetch("/usuarios/cadastrar", { // faz requisição POST para a rota /usuario/cadastrar
       method: "POST", // define o método como POST ppois está enviando dados
-      headers: { "Content-Type": "application/json" }, // informa que os dados são em formato JSON
+      headers: { "Content-Type": "application/json" }, 
       body: JSON.stringify({ // converte os dados para JSON antes de enviar
-        nomeServer: nomeVar, //envia o nome digitado
-        emailServer: emailVar, // envia o email digitado
-        senhaServer: senhaVar // envia a senha digitada
+        //envia o nome, email e senha digitado
+        nomeServer: nomeVar, 
+        emailServer: emailVar, 
+        senhaServer: senhaVar 
       })
     })
-      .then(function (resposta) { // quando o servidor responder, entra aqui
+      .then(function (resposta) { // quando o servidor responder entra aqui
         if (resposta.ok) { // se o cadastro foi realizado com sucesso
           cardErro.style.display = "block"; // exibe card de  mensgem de sucesso
           mensagem_erro.innerHTML = "Cadastro realizado com sucesso! Redirecionando..."; // exibe mensagem de sucesso
           setTimeout(function () { // aguarda 2 segundos antes de redirecionar
             window.location = "login.html"; // redireciona para a página de login após 2 segundos
           }, 2000);
-        } else { // se o servidor retornou um erro
-          resposta.text().then(function (texto) { // converte a resposta para texto
+        } else {
+          resposta.text().then(function (texto) { 
             cardErro.style.display = "block"; // exibe o card de erro
             mensagem_erro.innerHTML = texto; // exibe a mensagem de erro retornada pelo servidor (ex: email já cadastrado)
           });
@@ -193,7 +196,7 @@
         finalizarAguardar(); // para o loading
       });
 
-    return false; // impede o comportamento padrão do formulário
+    return false;
   }
 
   function sumirMensagem() {

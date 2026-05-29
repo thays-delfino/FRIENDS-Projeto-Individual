@@ -118,16 +118,17 @@
 
   //Quando a página termina de carregar, executa as quatro funções automaticamente
   window.onload = function () {
-    carregarKpis(); // carrega os cards de KPI
-    carregarGraficoPizza(); //carrega o gráfico de pizza
-    carregarGraficoPersonagens(); // carrega o gráfico de barras de personagem
-    carregarRanking(); // carrega o gráfico de ranking
+    // carrega os cards 
+    carregarKpis(); 
+    carregarGraficoPizza();
+    carregarGraficoPersonagens(); 
+    carregarRanking(); 
   }
 
-  //Faz uma requisição para /dashboard/kpis e quando o banco responde, pega os dados e preenche os três cards
+  //Faz uma requisição para rota /dashboard/kpis e quando o banco responde, pega os dados e preenche os três cards
   function carregarKpis() {
-    fetch("/dashboard/kpis") // faz uma requisição para a rota /dashboard/kpis
-      .then(function (resposta) { //quando o servidor responder, entra aqui
+    fetch("/dashboard/kpis") 
+      .then(function (resposta) { //quando o servidor responder entra aqui
         resposta.json().then(function (dados) { //converte a resposta para JSON
           document.getElementById("kpi-quizzes").innerText = dados.media; //preenche o card de média de acertos
           document.getElementById("kpi-testes").innerText = dados.totalTestes; // preenche o card de total de testes
@@ -137,14 +138,15 @@
   }
 
 
-  //Faz uma requisição para /dashboard/pizza e quando o banco responde, pega os dados e preenche os três cards
+  //Faz uma requisição para rota /dashboard/pizza e quando o banco responde, pega os dados e preenche os três cards
   function carregarGraficoPizza() {
-    fetch("/dashboard/pizza") // faz uma requisição para a rota /dashboard/pizza
-      .then(function (resposta) {  // quando o servidor responder, entra aqui
+    fetch("/dashboard/pizza") 
+      .then(function (resposta) {  // quando o servidor responder entra aqui
         resposta.json().then(function (dados) { // converte a resposta para JSON
 
-          var labels = []; // array vazia para guardar os nomes dos personagens
-          var valores = []; // array vazia para guardar as quantidades
+          // arrays vazias para guardar os nomes dos personagens e valores
+          var labels = []; 
+          var valores = [];
           
           for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
             labels.push(dados[i].identificacao); // adiciona o nome do personagem no array de labels
@@ -167,12 +169,13 @@
   }
 
   function carregarGraficoPersonagens() { // faz uma requisição para a rota /dashboard/personagens
-    fetch("/dashboard/personagens") // quando o servidor responder, entra aqui
+    fetch("/dashboard/personagens") 
       .then(function (resposta) {
         resposta.json().then(function (dados) { // converte a resposta para JSON
 
-          var labels = []; // array vazio para guardar os nomes dos personagens
-          var valores = []; // array vazio para guardar as quantidades
+          // arrays vazios para guardar os nomes dos personagens e total
+          var labels = []; 
+          var valores = []; 
 
           for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
             labels.push(dados[i].personagem); // adiciona o nome do personagem no array de labels
@@ -204,11 +207,12 @@
 
 function carregarRanking() {
     fetch("/dashboard/ranking") // faz uma requisição para a rota /dashboard/ranking
-      .then(function (resposta) { // quando o servidor responder, entra aqui
+      .then(function (resposta) { 
         resposta.json().then(function (dados) { // converte a resposta para JSON
 
-          var labels = []; // array vazio para guardar os nomes dos usuários
-          var valores = []; // array vazio para guardar as pontuações
+          // array vazio para guardar os nomes dos usuários e ponntuacao
+          var labels = []; 
+          var valores = []; 
 
           for (var i = 0; i < dados.length; i++) { // percorre cada item retornado pelo banco
             labels.push(dados[i].nome); // adiciona o nome do usuário no array de labels

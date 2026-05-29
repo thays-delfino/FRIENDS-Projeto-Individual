@@ -155,14 +155,14 @@
             },
         ];
 
-        var perguntaAtual = 0;  // controla qual pergunta está sendo exibida, começa na primeira (índice 0)
-        var pontuacao = 0;      // armazena a quantidade de acertos do usuário, começa em zero
-        var telaInicio = true;  // controla se ainda está na tela inicial
+        var perguntaAtual = 0; 
+        var pontuacao = 0;      
+        var telaInicio = true;  
 
         function iniciarQuiz() { // função chamada quando o usuário clica em "Iniciar Quiz"
-            perguntaAtual = 0;   // reseta para a primeira pergunta
-            pontuacao = 0;       // reseta a pontuação para zero
-            jaRespondeu = false; // reseta o controle de resposta
+            perguntaAtual = 0;   
+            pontuacao = 0;       
+            jaRespondeu = false; 
 
             document.getElementById("btnIniciar").style.display = "none";  // esconde o botão de iniciar
             document.getElementById("mensagem").style.display = "none";    // esconde a mensagem inicial
@@ -265,9 +265,10 @@
             console.log("idUsuario:", idUsuario); // exibe o id no console para debug
             console.log("pontuacao:", pontuacao); // exibe a pontuação no console para debug
 
-            fetch("/quiz/salvar", { // faz uma requisição POST para salvar o resultado no banco
-                method: "POST", // define o método como POST pois está enviando dados
-                headers: { "Content-Type": "application/json" }, // informa que os dados são em formato JSON
+            // faz uma requisição POST para enviar os resultados para uma rota da API
+            fetch("/quiz/salvar", { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ // converte os dados para JSON antes de enviar
                     idUsuario: idUsuario, // envia o id do usuário
                     pontuacao: pontuacao, // envia a pontuação final
